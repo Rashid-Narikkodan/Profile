@@ -4,3 +4,7 @@ export interface RegisterInput{
     password:string,
     phone?:string
 }
+export interface LoginInput{
+    email:string,
+    password:string
+}
