@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { RegisterInput,LoginInput } from "../types/auth";
-import { registerUser,loginUser } from "../services/auth.service";
+import { registerUser, loginUser, authUser } from "../services/auth.service";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -28,6 +28,27 @@ export const login = async (req: Request, res: Response) => {
     res.status(err.statusCode || 401).json({
       success: false,
       message: err.message || "Invalid credentials",
+    });
+  }
+};
+
+export const refresh = async (req: Request, res: Response) => {
+  try {
+
+    if(!req.user) throw new Error('User not Authenticated')
+    const { id } = req.user
+
+    // Fetch fresh user data from DB
+    const user = await authUser(id)
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Server error",
     });
   }
 };

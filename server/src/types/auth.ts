@@ -1,3 +1,4 @@
+import type { Request } from "express"
 export interface RegisterInput{
     name:string,
     email:string,

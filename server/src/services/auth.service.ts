@@ -9,7 +9,7 @@ import {
   validatePhone,
 } from "../utils/validation";
 
-// Registration Service
+// --------------Registration Service----------
 export const registerUser = async (input: RegisterInput) => {
   const { name, email, password, phone } = input;
 
@@ -40,9 +40,7 @@ export const registerUser = async (input: RegisterInput) => {
   });
   await user.save();
 
-
   //JWT access and refresh token optionally
-
 
   //create a public user data
   const publicUser: PublicUser = {
@@ -60,6 +58,8 @@ export const registerUser = async (input: RegisterInput) => {
   return { user: publicUser };
 };
 
+//-------Login Service----------
+
 export const loginUser = async (data: LoginInput) => {
   const { email, password } = data;
 
@@ -76,15 +76,15 @@ export const loginUser = async (data: LoginInput) => {
   if (!user) throw new Error("User not registered, please Register");
 
   //check password matching
-  const passHash = await bcrypt.hash(password,10)
-  const isValid = await bcrypt.compare(password,passHash)
-  if(!isValid) throw new Error('Invalid Credentials')
+  const passHash = await bcrypt.hash(password, 10);
+  const isValid = await bcrypt.compare(password, passHash);
+  if (!isValid) throw new Error("Invalid Credentials");
 
   //create access token
-  const accessToken = signAccessToken(user._id.toString(),user.role)
+  const accessToken = signAccessToken(user._id.toString(), user.role);
 
   //filter user data
-    const publicUser: PublicUser = {
+  const publicUser: PublicUser = {
     _id: user._id.toString(),
     email: user.email,
     phone: user.phone,
@@ -95,6 +95,13 @@ export const loginUser = async (data: LoginInput) => {
     updatedAt: user.updatedAt,
   };
 
+  return { user: publicUser, accessToken };
+};
 
-  return { user:publicUser, accessToken};
+// ------ get Authenticated user ----------
+
+export const authUser = async (id: string) => {
+  const user = await User.findById(id).select('-password')
+  if (!user) throw new Error("User not found");
+  return user;
 };

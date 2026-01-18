@@ -15,6 +15,6 @@
     "strictNullChecks": true,         // catch null/undefined
     "noEmitOnError": true              // prevent emit if TS errors
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src", "src/types"],
   "exclude": ["node_modules", "dist"]
 }
