@@ -25,7 +25,7 @@ export const registerUser = async (input: RegisterInput) => {
 
   //check for existence
   const existingUser = await User.findOne({ email });
-  if (existingUser) throw new Error("Email already registered, please login");
+  if (existingUser) throw new Error("User already registered, please login");
 
   //password encryption
   const passwordHash = await bcrypt.hash(password, 10);
