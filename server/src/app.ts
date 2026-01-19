@@ -3,6 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
+import adminRoutes from './routes/admin.routes'
 
 export const app: Application = express();
 
@@ -37,6 +38,7 @@ app.get("/health", (_req: Request, res: Response) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 app.use((_req: Request, res: Response) => { //404
@@ -57,7 +59,7 @@ app.use( //global error handler
 
     res.status(500).json({
         success:false,
-      message: "Internal server error",
+      message: err.message || "Internal server error",
     });
   }
 );

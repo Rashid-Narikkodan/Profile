@@ -12,7 +12,7 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
-  console.log("Hit editUserProfile");
+  console.log("Hit auth middleware");
 
   // 1. Header presence
   if (!authHeader) {

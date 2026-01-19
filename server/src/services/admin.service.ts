@@ -75,7 +75,7 @@ export const updateUserService = async (
     throw new Error("Invalid user id");
   }
 
-  const allowedFields = ["name", "email", "phone", "status", "role"];
+  const allowedFields = ["name", "email", "phone", "status"];
   const updateData: Record<string, any> = {};
 
   for (const key of allowedFields) {
