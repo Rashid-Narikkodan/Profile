@@ -12,8 +12,12 @@ export const editUser = async ( userId: string, data: EditUserInput) => {
   // Whitelist fields explicitly
   const updateData: Partial<EditUserInput> = {};
 
+  if (data.email){
+    const user = await User.findOne({email:data.email})
+    if(user) throw new Error('Already registered Email')
+    else updateData.email = data.email;
+  }
   if (data.name) updateData.name = data.name;
-  if (data.email) updateData.email = data.email;
   if (data.phone) updateData.phone = data.phone;
 
   const updatedUser = await User.findByIdAndUpdate(
@@ -36,19 +40,15 @@ export const updateUserAvatar = async (
   userId: string,
   file: Express.Multer.File
 ) => {
-  // 1️⃣ fetch user
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
 
-  // 2️⃣ upload file
   const uploaded = await uploadImage(file.buffer, { folder: "avatars" });
 
-  // 3️⃣ delete old avatar
   if (user.avatar?.publicId) {
     await deleteImage(user.avatar.publicId);
   }
 
-  // 4️⃣ update DB
   user.avatar = {
     url: uploaded.url,
     publicId: uploaded.publicId,
@@ -57,3 +57,25 @@ export const updateUserAvatar = async (
 
   return user;
 };
+
+export const getUserById = async (userId:string) => {
+  return await User.findById(userId)
+}
+
+export const deleteAccountService = async (userId: string) => {
+  // 1. Delete avatar if exists
+  deleteAvatarService(userId)
+
+  // 2. Delete user document
+  await User.findByIdAndDelete(userId);
+
+};
+
+export const deleteAvatarService= async (userId:string) =>{
+  const user = await User.findById(userId)
+  if(!user) return 
+    // 1. Delete avatar if exists
+  if (user.avatar?.publicId) {
+    await deleteImage(user.avatar.publicId);
+  }
+}

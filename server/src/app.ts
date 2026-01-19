@@ -2,6 +2,7 @@ import express, { Application, Request, Response, NextFunction } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import authRoutes from './routes/auth.routes'
+import userRoutes from './routes/user.routes'
 
 export const app: Application = express();
 
@@ -35,7 +36,7 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRoutes);
-// app.use("/api/v1/users", userRoutes);
+app.use("/api/user", userRoutes);
 
 
 app.use((_req: Request, res: Response) => { //404

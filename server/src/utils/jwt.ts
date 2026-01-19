@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const JWT_EXPIRES_IN = "15m";
+const JWT_EXPIRES_IN = "30m";
 
 export const signAccessToken = (userId: string, role: string) => {
   return jwt.sign(
