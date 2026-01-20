@@ -36,7 +36,7 @@ extraReducers: (builder) => {
       state.error=null
     })
     .addCase(registerUser.rejected, (state, action) => {
-      console.log(action.payload)
+      console.log("rejected ", action.payload)
       state.status = 'unauthenticated'
       state.error = action.payload ?? 'Registration failed'
     })

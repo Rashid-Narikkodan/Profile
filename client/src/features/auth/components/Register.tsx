@@ -100,11 +100,11 @@ const RegisterModal: React.FC<{
             </div>
 
             <button
-            disabled={isLoading}
+              disabled={isLoading}
               type="submit"
-              className="w-full mt-4 bg-purple-600 hover:bg-purple-700 py-2 rounded text-white font-medium shadow-lg shadow-purple-800/40 transition"
+              className={`w-full mt-4 ${isLoading ? "bg-purple-800" :'bg-purple-600 hover:bg-purple-700'} py-2 rounded text-white font-medium shadow-lg shadow-purple-800/40 transition`}
             >
-              Create Account
+              {isLoading?"Creating...":"Create Account"}
             </button>
 
           </form>
