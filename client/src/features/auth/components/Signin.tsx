@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAppSelector } from "../../../store/hooks";
+import { useAppSelector } from "../../../hooks/redux";
 
 type Props = {
   onClose: () => void;
@@ -8,7 +8,8 @@ type Props = {
 
 const SigninModal: React.FC<Props> = ({ onClose, onOpenRegister }) => {
 
-  const { loading, error } = useAppSelector((state)=>state.auth)
+  const isLoading = useAppSelector((state)=>state.auth.status === 'loading')
+  const error = useAppSelector((state)=>state.auth.error)
 
   const [form, setForm] = useState({
     email: "",
@@ -21,7 +22,7 @@ const SigninModal: React.FC<Props> = ({ onClose, onOpenRegister }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return;
+    if (isLoading) return;
 
   };
 
@@ -84,10 +85,10 @@ const SigninModal: React.FC<Props> = ({ onClose, onOpenRegister }) => {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={isLoading}
               className="w-full mt-4 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed py-2 rounded text-white font-medium shadow-lg shadow-purple-800/40 transition"
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {isLoading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 

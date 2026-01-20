@@ -16,7 +16,8 @@ export const registerUser = createAsyncThunk<
   { rejectValue: string }
 >("auth/registerUser", async (data, { rejectWithValue }) => {
   try {
-    const res = await registerApi(data);
+      const res = await registerApi(data);
+      console.log(res)
     return res.data;
   } catch (err) {
     if (err instanceof Error) {

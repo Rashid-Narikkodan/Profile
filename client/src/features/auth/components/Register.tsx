@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { registerUser } from "../authState/auth.thunk";
 
-const RegisterModal: React.FC<{ onClose: () => void,onOpenLogin:()=>void }> = ({ onClose,onOpenLogin }) => {
+const RegisterModal: React.FC<{
+  onClose: () => void,
+  onOpenLogin:()=>void
+}> = ({ onClose,onOpenLogin }) => {
 
   const [form, setForm] = useState({
     name: "",
@@ -9,12 +14,17 @@ const RegisterModal: React.FC<{ onClose: () => void,onOpenLogin:()=>void }> = ({
     phone: "",
   });
 
+  const isLoading = useAppSelector((state) => state.auth.status === 'loading')
+
+  const dispatch = useAppDispatch()
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    dispatch(registerUser(form))
   }
 
   return (
@@ -90,6 +100,7 @@ const RegisterModal: React.FC<{ onClose: () => void,onOpenLogin:()=>void }> = ({
             </div>
 
             <button
+            disabled={isLoading}
               type="submit"
               className="w-full mt-4 bg-purple-600 hover:bg-purple-700 py-2 rounded text-white font-medium shadow-lg shadow-purple-800/40 transition"
             >
