@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../features/auth/authSlice";
+import { logout } from "../../features/auth/authState/authSlice";
 import type { RootState } from "../../store/type";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 

@@ -11,3 +11,4 @@ export type PublicUser = {
   createdAt: Date;
   updatedAt: Date;
 };
+
