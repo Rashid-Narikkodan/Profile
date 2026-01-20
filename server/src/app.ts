@@ -4,6 +4,7 @@ import morgan from "morgan";
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
 import adminRoutes from './routes/admin.routes'
+import cookieParser from 'cookie-parser'
 import { errorHandler } from "./middlewares/global.error";
 
 export const app: Application = express();
@@ -19,6 +20,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(cookieParser())
 
 // Logging (dev vs prod)
 if (process.env.NODE_ENV !== "production") {
