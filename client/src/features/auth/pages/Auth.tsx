@@ -7,11 +7,11 @@ const Auth: React.FC = () => {
   const [mode, setMode] = useState<"login" | "register">("login");
     const navigate = useNavigate()
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-purple-900 relative overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center bg-linear-to-br from-black via-gray-900 to-purple-900 relative overflow-hidden">
 
       {/* Ambient glows */}
-      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-purple-700 rounded-full blur-[140px] opacity-30" />
-      <div className="absolute bottom-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-700 rounded-full blur-[140px] opacity-20" />
+      <div className="absolute -top-40 -left-40 w-125 h-125 bg-purple-700 rounded-full blur-[140px] opacity-30" />
+      <div className="absolute -bottom-50 -right-50 w-125 h-125 bg-indigo-700 rounded-full blur-[140px] opacity-20" />
 
       {/* Auth Card */}
       <div className="relative z-10 w-full max-w-md bg-gray-900/80 backdrop-blur-xl border border-purple-800/40 rounded-xl shadow-2xl p-8">

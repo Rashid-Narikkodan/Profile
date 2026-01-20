@@ -1,20 +1,19 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authState/authSlice";
-import type { RootState } from "../../store/type";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
 const Header: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useAppSelector((state) => state.auth.user);
 
-  const isHome = location.pathname === "/";
+  const isHome = location.pathname === "/home";
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/auth");
+    navigate("/");
   };
 
   return (
@@ -56,7 +55,7 @@ const Header: React.FC = () => {
         <div className="flex items-center space-x-4">
           {user ? (
             <>
-              <span className="text-gray-300">{user.name}</span>
+              <span className="text-gray-300">{user.email}</span>
               <button
                 onClick={handleLogout}
                 className="bg-gray-800 hover:bg-gray-700 px-4 py-1 rounded transition"

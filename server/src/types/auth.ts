@@ -13,6 +13,7 @@ export interface LoginInput{
 export interface AuthUser{
   id:string,
   email:string,
+  name:string;
   role:'admin'|'user'
   status:'active'|'inactive'
 }

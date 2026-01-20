@@ -48,6 +48,7 @@ export const registerUser = async (input: RegisterInput) => {
   const publicUser: AuthUser = {
     id: user._id.toString(),
     email: user.email,
+    name:user.name,
     role: user.role,
     status: user.status,
   };
