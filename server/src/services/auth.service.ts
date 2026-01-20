@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import User from "../models/user.model";
-import { LoginInput, RegisterInput } from "../types/auth";
+import { AuthUser, LoginInput, RegisterInput } from "../types/auth";
 import { PublicUser } from "../types/user";
 import { signAccessToken } from "../utils/jwt";
 import {
@@ -12,17 +12,17 @@ import {
 // --------------Registration Service----------
 export const registerUser = async (input: RegisterInput) => {
   const { name, email, password, phone } = input;
-
+  
   //validation
   if (!name || !email || !password)
     throw new Error("Name, email, and password are required");
   if (name.length < 2 || name.length > 50)
     throw new Error("Name must be between 2 and 50 characters");
-
+  
   validateEmail(email);
   validatePassword(password);
   validatePhone(phone);
-
+  
   //check for existence
   const existingUser = await User.findOne({ email });
   if (existingUser) throw new Error("User already registered, please login");
@@ -41,21 +41,18 @@ export const registerUser = async (input: RegisterInput) => {
   await user.save();
 
   //JWT access and refresh token optionally
+  const accessToken = signAccessToken(user.id,user.role)
 
   //create a public user data
-  const publicUser: PublicUser = {
-    _id: user._id.toString(),
+  const publicUser: AuthUser = {
+    id: user._id.toString(),
     email: user.email,
-    phone: user.phone,
-    name: user.name,
     role: user.role,
     status: user.status,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
   };
 
   //return user data
-  return { user: publicUser };
+  return { user: publicUser, accessToken };
 };
 
 //-------Login Service----------
