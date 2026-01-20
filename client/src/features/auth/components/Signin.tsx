@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import {
-  loginStart,
-  loginSuccess,
-  loginFailure,
-} from "../../store/authSlice";
-import { login } from "../../api/auth";
-import { useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "../../../store/hooks";
 
 type Props = {
   onClose: () => void;
@@ -15,8 +7,6 @@ type Props = {
 };
 
 const SigninModal: React.FC<Props> = ({ onClose, onOpenRegister }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { loading, error } = useAppSelector((state)=>state.auth)
 
@@ -33,20 +23,6 @@ const SigninModal: React.FC<Props> = ({ onClose, onOpenRegister }) => {
     e.preventDefault();
     if (loading) return;
 
-    dispatch(loginStart());
-
-    try {
-      const payload = await login(form);
-      dispatch(loginSuccess(payload));
-      navigate("/home");
-      onClose();
-    } catch (err: unknown) {
-      dispatch(
-        loginFailure(
-          err instanceof Error ? err.message : "Login failed"
-        )
-      );
-    }
   };
 
   const handleOpenRegister = () => {

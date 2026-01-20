@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Signin from "./Signin";
-import RegisterModal from "./Register";
+import Signin from "../components/Signin";
+import Register from "../components/Register";
 import { useNavigate } from "react-router-dom";
 
 const Auth: React.FC = () => {
@@ -29,7 +29,7 @@ const Auth: React.FC = () => {
         </div>
 
         {/* Forms */}
-        {mode === "login" ? <Signin onClose={()=>navigate('/')} onOpenRegister={()=>setMode('register')}/> : <RegisterModal onClose={()=>navigate('/')} onOpenLogin={()=>setMode('login')}/>}
+        {mode === "login" ? <Signin onClose={()=>navigate('/')} onOpenRegister={()=>setMode('register')}/> : <Register onClose={()=>navigate('/')} onOpenLogin={()=>setMode('login')}/>}
 
         {/* Switch */}
         <div className="mt-6 text-center text-sm text-gray-400">

@@ -1,19 +1,22 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { PublicUser } from "../types/user";
+import type { PublicUser } from "../../types/user";
 
 interface AuthState {
   user: PublicUser | null;
   isAuthenticated: boolean;
+  accessToken:string|null;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: AuthState = {
+const initialState:AuthState = {
   user: null,
+  accessToken: null,
   isAuthenticated: false,
   loading: false,
-  error: null
+  error: null,
 };
+
 
 const authSlice = createSlice({
   name: "auth",

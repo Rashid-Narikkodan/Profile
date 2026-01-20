@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { registerStart,registerFailure,registerSuccess } from "../../store/authSlice";
-import { useNavigate } from "react-router-dom";
-import { register } from "../../api/auth";
 
 const RegisterModal: React.FC<{ onClose: () => void,onOpenLogin:()=>void }> = ({ onClose,onOpenLogin }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: "",
@@ -21,15 +15,7 @@ const RegisterModal: React.FC<{ onClose: () => void,onOpenLogin:()=>void }> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    dispatch(registerStart());
-
-    register(form)
-  .then(user => dispatch(registerSuccess(user)))
-  .catch(err => dispatch(registerFailure(err.message)));
-    navigate("/home");
-    onClose();
-  };
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
