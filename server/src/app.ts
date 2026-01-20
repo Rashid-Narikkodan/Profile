@@ -4,6 +4,7 @@ import morgan from "morgan";
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
 import adminRoutes from './routes/admin.routes'
+import { errorHandler } from "./middlewares/global.error";
 
 export const app: Application = express();
 
@@ -47,18 +48,7 @@ app.use((_req: Request, res: Response) => { //404
   });
 });
 
-app.use( //global error handler
-  (
-    err: Error,
-    _req: Request,
-    res: Response,
-    _next: NextFunction
-  ) => {
-    console.error(err);
+//Global error hanmdle midleware
+app.use(errorHandler)
 
-    res.status(500).json({
-        success:false,
-      message: err.message || "Internal server error",
-    });
-  }
-);
+

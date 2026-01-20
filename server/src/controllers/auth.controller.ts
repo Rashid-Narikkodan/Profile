@@ -1,18 +1,18 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { RegisterInput,LoginInput } from "../types/auth";
 import { registerUser, loginUser, authUser } from "../services/auth.service";
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response,next:NextFunction) => {
   try {
     const data:RegisterInput = req.body;
     const {user, accessToken} = await registerUser(data);
     res.status(201).json({success:true,user,accessToken,message:'New User Registered'});
   } catch (err: any) {
-    res.status(400).json({success:false, message: err.message });
+    next(err)
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response,next:NextFunction) => {
   try {
     const data: LoginInput = req.body;
 
@@ -25,16 +25,12 @@ export const login = async (req: Request, res: Response) => {
       message:'User Logged in successfully'
     });
   } catch (err: any) {
-    res.status(err.statusCode || 401).json({
-      success: false,
-      message: err.message || "Invalid credentials",
-    });
+    next(err)
   }
 };
 
 export const refresh = async (req: Request, res: Response) => {
   try {
-
     if(!req.user) throw new Error('User not Authenticated')
     const { id } = req.user
 

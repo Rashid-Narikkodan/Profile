@@ -3,6 +3,7 @@ import User from "../models/user.model";
 import { AuthUser, LoginInput, RegisterInput } from "../types/auth";
 import { PublicUser } from "../types/user";
 import { signAccessToken } from "../utils/jwt";
+import { AppError } from "../utils/AppError";
 import {
   validateEmail,
   validatePassword,
@@ -25,7 +26,7 @@ export const registerUser = async (input: RegisterInput) => {
   
   //check for existence
   const existingUser = await User.findOne({ email });
-  if (existingUser) throw new Error("User already registered, please login");
+  if (existingUser) throw new AppError("User already registered, please login",400);
 
   //password encryption
   const passwordHash = await bcrypt.hash(password, 10);
@@ -62,7 +63,7 @@ export const loginUser = async (data: LoginInput) => {
 
   //validation
   if (!email.trim() || !password.trim())
-    throw new Error("Email and Password is required");
+    throw new AppError("Email and Password is required",400);
   validatePassword(password);
   validateEmail(email);
 
@@ -70,12 +71,12 @@ export const loginUser = async (data: LoginInput) => {
   const user = await User.findOne({ email });
 
   //check for existence
-  if (!user) throw new Error("User not registered, please Register");
+  if (!user) throw new AppError("User not registered, please Register",400);
 
   //check password matching
   const passHash = await bcrypt.hash(password, 10);
   const isValid = await bcrypt.compare(password, passHash);
-  if (!isValid) throw new Error("Invalid Credentials");
+  if (!isValid) throw new AppError("Invalid Credentials",400);
 
   //create access token
   const accessToken = signAccessToken(user._id.toString(), user.role);
@@ -99,6 +100,6 @@ export const loginUser = async (data: LoginInput) => {
 
 export const authUser = async (id: string) => {
   const user = await User.findById(id).select('-password')
-  if (!user) throw new Error("User not found");
+  if (!user) throw new AppError("User not found",400);
   return user;
 };
