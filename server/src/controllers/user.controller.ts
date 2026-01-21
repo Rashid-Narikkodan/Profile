@@ -19,7 +19,7 @@ export const editUserProfile = async (
 
     return res.status(200).json({success:true,user});
   } catch (error:any) {
-    return res.status(400).json({success:false,message:error.message})
+    next(error)
   }
 };
 
