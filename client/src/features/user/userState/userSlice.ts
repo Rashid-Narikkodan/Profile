@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUser, updateUser } from "./user.thunk";
+import { fetchUser, updateUser, uploadUserAvatar } from "./user.thunk";
 import type { PublicUser } from "../../../types/user";
 
 
@@ -34,7 +34,6 @@ const userSlice = createSlice({
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        console.log(action.payload)
         state.data = action.payload.user;
       })
       .addCase(fetchUser.rejected, (state, action) => {
@@ -54,6 +53,21 @@ const userSlice = createSlice({
         }
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload ?? "Failed to load user";
+      })
+
+      .addCase(uploadUserAvatar.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(uploadUserAvatar.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        if(state.data){
+          state.data.avatar = action.payload
+        }
+      })
+      .addCase(uploadUserAvatar.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload ?? "Failed to load user";
       });

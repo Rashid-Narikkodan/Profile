@@ -95,7 +95,6 @@ export const bootstrapAuth = createAsyncThunk<
         // 1. Call refresh endpoint to get new access token
         const refreshRes = await refreshApi();
         const accessToken = refreshRes.data.accessToken;
-        console.log("Response :-",refreshRes)
         // 2. Fetch current authenticated user
         const meRes = await api.get("/auth/me", {
           headers: { Authorization: `Bearer ${accessToken}` },

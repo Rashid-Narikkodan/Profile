@@ -1,20 +1,15 @@
 import React from "react";
-import { logoutUser } from "../../features/auth/authState/auth.thunk";
+import {  } from "../../features/auth/authState/auth.thunk";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { useAppSelector } from "../../hooks/redux";
 
 const Header: React.FC = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const user = useAppSelector((state) => state.auth.user);
 
   const isHome = location.pathname === "/home";
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate("/");
-  };
 
   return (
     <header
@@ -50,24 +45,14 @@ const Header: React.FC = () => {
 
         {/* Actions */}
         <div className="flex items-center space-x-4">
-          {user ? (
-            <>
-              <span className="text-gray-300">{user.name}</span>
-              <button
-                onClick={handleLogout}
-                className="bg-gray-800 hover:bg-gray-700 px-4 py-1 rounded transition"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
+          {!user &&
             <button
               onClick={() => navigate("/auth")}
               className="bg-purple-600 hover:bg-purple-700 px-4 py-1 rounded font-medium shadow-lg shadow-purple-800/40 transition"
             >
               Sign In
             </button>
-          )}
+          }
         </div>
 
       </div>

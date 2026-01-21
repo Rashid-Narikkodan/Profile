@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { fetchUser } from "../userState/user.thunk";
 import Loader from "../../../components/ui/Loader";
-import { BiLeftArrow } from "react-icons/bi";
+import { ArrowLeftCircle } from "lucide-react";
 import ProfileDetails from "../components/ProfileDetails";
 import ProfileCard from "../components/ProfileCard";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const { data: user, error, status } = useAppSelector((state) => state.user);
-
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!user) dispatch(fetchUser());
@@ -22,7 +23,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen w-screen rounded bg-gray-950 text-gray-100 relative overflow-hidden">
-      <BiLeftArrow />
+      < ArrowLeftCircle onClick={()=>navigate(-1)} size={34} className="absolute top-5 left-5" />
       {/* Background Glows */}
       <BackgroundGlows />
 
@@ -35,7 +36,7 @@ export default function ProfilePage() {
 
           {/* Right: Profile Details */}
           <div className="lg:col-span-8">
-            <ProfileDetails user={user}/>
+            <ProfileDetails/>
           </div>
         </div>
       </div>

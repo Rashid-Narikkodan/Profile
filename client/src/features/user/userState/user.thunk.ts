@@ -1,8 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import type { PublicUser } from "../../../types/user";
+import type { Avatar, PublicUser } from "../../../types/user";
 import { getUser,editUser } from "../../../api/user";
 import type { EditUserInput } from "../../../types/user";
+import api from "../../../api/axios";
 
 
 type FetchUserResponse = {
@@ -65,3 +66,38 @@ export const updateUser= createAsyncThunk<
       return rejectWithValue("Registration failed")
     }
 })
+
+export const uploadUserAvatar = createAsyncThunk<
+  Avatar,          // fulfilled return type
+  File,          // argument type
+  { rejectValue: string }
+>(
+  "user/uploadAvatar",
+  async (file, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const res = await api.post("/user/me/avatar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+
+      return res.data.avatar;
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(
+          err.response?.data?.message ?? "Avatar upload failed"
+        );
+      }
+
+      if (err instanceof Error) {
+        return rejectWithValue(err.message);
+      }
+
+      return rejectWithValue("Avatar upload failed");
+    }
+  }
+);

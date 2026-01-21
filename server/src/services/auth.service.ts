@@ -86,10 +86,8 @@ export const loginUser = async (data: LoginInput) => {
 
   // password verification (FIXED)
   const isValid = await bcrypt.compare(password, user.password);
-  if (!isValid) {
-    console.log(isValid)
-    throw new AppError("Invalid credentials", 400);
-  }
+  if (!isValid) throw new AppError("Invalid credentials", 400);
+  
   
   // issue tokens
   const accessToken = signAccessToken(user.id, user.role);

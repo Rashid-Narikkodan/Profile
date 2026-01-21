@@ -38,11 +38,11 @@ export const updateAvatar = async (
       return res.status(400).json({ message: "Avatar file is required" });
     }
 
-    const user = await updateUserAvatar(userId, req.file);
+    const avatar = await updateUserAvatar(userId, req.file);
 
     return res.status(200).json({
       success: true,
-      user,
+      avatar
     });
   } catch (error) {
     next(error);

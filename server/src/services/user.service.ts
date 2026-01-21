@@ -68,7 +68,7 @@ export const updateUserAvatar = async (
   };
   await user.save();
 
-  return user;
+  return user.avatar;
 };
 
 export const getUserById = async (userId:string) => {
