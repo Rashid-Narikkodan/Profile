@@ -13,3 +13,9 @@ export interface PublicUser {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type EditUserInput={
+  name?:string,
+  email?:string,
+  phone?:string
+}

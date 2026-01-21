@@ -23,24 +23,17 @@ const Landing = () => {
       {/* Content */}
       <div className="relative z-10 max-w-3xl text-center px-6 py-20">
         <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
-          {user ? (
+     
             <>
-              Welcome back,{" "}
-              <span className="text-purple-400">{user.name}</span>
+              Build & Manage Profiles with 
+              <span className="text-purple-400 ml-2">Profile.io</span>
             </>
-          ) : (
-            <>
-              Build & Manage Profiles with{" "}
-              <span className="text-purple-400">Profile.io</span>
-            </>
-          )}
         </h1>
 
         <p className="text-gray-300 text-lg mb-10">
-          {user
-            ? "You are logged in. Manage users, roles, and profiles from your dashboard."
-            : "A modern platform to manage user profiles, roles, and access — built for scale, security, and speed."}
+            A modern platform to manage user profiles, roles, and access — built for scale, security, and speed.
         </p>
+
 
         <button
           onClick={handlePrimaryAction}

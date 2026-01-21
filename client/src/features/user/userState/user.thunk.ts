@@ -1,7 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { PublicUser } from "../../../types/user";
-import { getUser } from "../../../api/user";
+import { getUser,editUser } from "../../../api/user";
+import type { EditUserInput } from "../../../types/user";
+
 
 type FetchUserResponse = {
     success: true
@@ -17,7 +19,7 @@ export const fetchUser = createAsyncThunk<
   void,
   { rejectValue: string }
 >(
-  "auth/fetchUser",
+  "user/fetchUser",
   async (_, { rejectWithValue }) => {
     try {
       const res = await getUser()
@@ -38,3 +40,28 @@ export const fetchUser = createAsyncThunk<
     }
     }
 );
+
+export const updateUser= createAsyncThunk<
+  EditUserInput,
+  EditUserInput,
+  { rejectValue: string }
+>('user/updateUser',
+   async (data,{rejectWithValue})=>{
+    try {
+      const res = await editUser(data)
+      return res.data.user;
+  }catch(err:unknown){
+    if (axios.isAxiosError<ErrorResponse>(err)) {
+        return rejectWithValue(
+          err.response?.data?.message ?? "Registration failed"
+        )
+      }
+
+      // Non-Axios / unexpected error
+      if (err instanceof Error) {
+        return rejectWithValue(err.message)
+      }
+
+      return rejectWithValue("Registration failed")
+    }
+})
