@@ -28,6 +28,7 @@ const RegisterModal: React.FC<{
   });
   const navigate = useNavigate();
   const isLoading = useAppSelector((state) => state.auth.status === "loading");
+  const error = useAppSelector((state) => state.auth.error);
   const dispatch = useAppDispatch();
 
 
@@ -72,7 +73,6 @@ const RegisterModal: React.FC<{
       <div className="relative z-10 w-full max-w-md rounded-xl bg-linear-to-br from-gray-900 via-purple-900/40 to-gray-900 border border-purple-800/40 shadow-2xl">
         {/* Glow */}
         <div className="absolute -top-24 -left-24 w-64 h-64 bg-purple-700 rounded-full blur-3xl opacity-30" />
-
         <div className="relative p-8">
           <h2 className="text-2xl font-bold text-white mb-2">
             Create your account
@@ -81,7 +81,10 @@ const RegisterModal: React.FC<{
           <p className="text-gray-400 mb-6">
             Start managing profiles and access securely.
           </p>
-
+{
+error&&
+        <div className="mb-3 rounded bg-red-900/40 border border-red-700 text-red-200 px-4 py-2 text-sm">{error}</div>
+}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="text-gray-300 text-sm">Full name</label>

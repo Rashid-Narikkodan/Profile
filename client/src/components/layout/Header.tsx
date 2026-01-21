@@ -35,7 +35,7 @@ const Header: React.FC = () => {
 
         {/* Nav */}
         <nav className="flex space-x-6">
-          <Link to="/" className="hover:text-white transition">
+          <Link to="/home" className="hover:text-white transition">
             Home
           </Link>
 
@@ -43,9 +43,6 @@ const Header: React.FC = () => {
             <>
               <Link to="/users" className="hover:text-white transition">
                 Users
-              </Link>
-              <Link to="/settings" className="hover:text-white transition">
-                Settings
               </Link>
             </>
           )}

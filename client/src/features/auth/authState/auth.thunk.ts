@@ -1,80 +1,91 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { login, register as registerApi } from "../../../api/auth";
-import type { AuthUser, LoginInput } from "../../../types/auth";
-import type { RegisterInput } from "../../../types/auth";
-import axios from "axios"
+import type { AuthUser, LoginInput, RegisterInput } from "../../../types/auth";
+import axios from "axios";
+import api from "../../../api/axios";
+import { login as loginApi, refresh as refreshApi, register as registerApi } from "../../../api/auth";
 
-export type RegisterApiResponse = {
+// ---------------- Types ----------------
+export type AuthApiResponse = {
   success: boolean;
   user: AuthUser;
   accessToken: string;
   message: string;
-}
-export type LoginApiResponse = {
-  success: boolean;
-  user: AuthUser;
-  accessToken: string;
+};
+
+type ErrorResponse = {
+  success: false;
   message: string;
-}
-type ErrorResponse={
-  success: false
-  message: string
-}
-;
+};
 
-
+// ---------------- Register Thunk ----------------
 export const registerUser = createAsyncThunk<
-  RegisterApiResponse,
+  { user: AuthUser; accessToken: string },
   RegisterInput,
   { rejectValue: string }
 >(
   "auth/registerUser",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await registerApi(data)
-      return res.data
+      // Send register request with cookies if backend sets refresh token
+      const res = await registerApi(data);
+
+      // Return only necessary data
+      return { user: res.data.user, accessToken: res.data.accessToken };
     } catch (err: unknown) {
       if (axios.isAxiosError<ErrorResponse>(err)) {
-        return rejectWithValue(
-          err.response?.data?.message ?? "Registration failed"
-        )
+        return rejectWithValue(err.response?.data?.message ?? "Registration failed");
       }
-
-      // Non-Axios / unexpected error
-      if (err instanceof Error) {
-        return rejectWithValue(err.message)
-      }
-
-      return rejectWithValue("Registration failed")
+      if (err instanceof Error) return rejectWithValue(err.message);
+      return rejectWithValue("Registration failed");
     }
   }
-)
+);
 
+// ---------------- Login Thunk ----------------
 export const loginUser = createAsyncThunk<
-  LoginApiResponse,
+  { user: AuthUser; accessToken: string },
   LoginInput,
   { rejectValue: string }
 >(
   "auth/loginUser",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await login(data)
-      return res.data
+      const res = await loginApi(data);
+      return { user: res.data.user, accessToken: res.data.accessToken };
     } catch (err: unknown) {
       if (axios.isAxiosError<ErrorResponse>(err)) {
-        return rejectWithValue(
-          err.response?.data?.message ?? "Login failed"
-        )
+        return rejectWithValue(err.response?.data?.message ?? "Login failed");
       }
-
-      // Non-Axios / unexpected error
-      if (err instanceof Error) {
-        return rejectWithValue(err.message)
-      }
-
-      return rejectWithValue("Registration failed")
+      if (err instanceof Error) return rejectWithValue(err.message);
+      return rejectWithValue("Login failed");
     }
   }
-)
+);
 
+// ---------------- Bootstrap Auth Thunk ----------------
+export const bootstrapAuth = createAsyncThunk<
+  { user: AuthUser; accessToken: string },
+  void,
+  { rejectValue: string }
+>(
+  "auth/bootstrapAuth",
+  async (_, { rejectWithValue }) => {
+    try {
+      // 1. Call refresh endpoint to get new access token
+      const refreshRes = await refreshApi();
+      const accessToken = refreshRes.data.accessToken;
 
+      // 2. Fetch current authenticated user
+      const meRes = await api.get("/auth/me", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        withCredentials: true, // ensure cookies are sent if needed
+      });
+
+      return { user: meRes.data.user, accessToken };
+    } catch (err: unknown) {
+      console.log("BootstrapAuth error:", err);
+      if (err instanceof Error) return rejectWithValue(err.message || "Unable to refresh session");
+      return rejectWithValue("Unable to refresh session");
+    }
+  }
+);

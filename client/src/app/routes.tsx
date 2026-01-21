@@ -3,29 +3,26 @@ import MainLayout from "../components/layout/MainLayout"
 import Landing from "../pages/Landing"
 import Home from "../pages/Home"
 import Auth from "../features/auth/pages/Auth"
-import RequireAuth from "../components/RequireAuth"
-import PublicOnly from "../components/PublicOnly"
+import ProtoctedRoute from "../components/ProtectedRoute"
+import PublicRoute from "../components/PublicRoute"
 import Profile from "../features/user/pages/Profile"
-import ProfileEdit from "../features/user/components/ProfileEdit"
 
 export const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [
+      { path: "/", element: <Landing /> },
       {
-        element: <PublicOnly />,
+        element: <PublicRoute />,
         children: [
           { path: "/auth", element: <Auth /> },
-          { path: "/", element: <Landing /> },
         ],
       },
-
       {
-        element: <RequireAuth />,
+        element: <ProtoctedRoute />,
         children: [
           { path: "/home", element: <Home /> },
           { path: "/me", element: <Profile /> },
-          { path: "/edit/me", element: <ProfileEdit /> },
         ],
       },
     ],
