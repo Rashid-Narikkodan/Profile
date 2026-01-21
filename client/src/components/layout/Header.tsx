@@ -1,5 +1,5 @@
 import React from "react";
-import { logout } from "../../features/auth/authState/authSlice";
+import { logoutUser } from "../../features/auth/authState/auth.thunk";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   const isHome = location.pathname === "/home";
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutUser());
     navigate("/");
   };
 
@@ -52,7 +52,7 @@ const Header: React.FC = () => {
         <div className="flex items-center space-x-4">
           {user ? (
             <>
-              <span className="text-gray-300">{user.email}</span>
+              <span className="text-gray-300">{user.name}</span>
               <button
                 onClick={handleLogout}
                 className="bg-gray-800 hover:bg-gray-700 px-4 py-1 rounded transition"

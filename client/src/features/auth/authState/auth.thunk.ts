@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AuthUser, LoginInput, RegisterInput } from "../../../types/auth";
 import axios from "axios";
 import api, { setAccessToken } from "../../../api/axios";
-import { login as loginApi, refresh as refreshApi, register as registerApi } from "../../../api/auth";
+import { login as loginApi, refresh as refreshApi, register as registerApi, logout as logoutApi } from "../../../api/auth";
 
 // ---------------- Types ----------------
 export type AuthApiResponse = {
@@ -53,6 +53,26 @@ export const loginUser = createAsyncThunk<
       const res = await loginApi(data);
       setAccessToken(res.data.accessToken)
       return { user: res.data.user, accessToken: res.data.accessToken };
+    } catch (err: unknown) {
+      if (axios.isAxiosError<ErrorResponse>(err)) {
+        return rejectWithValue(err.response?.data?.message ?? "Login failed");
+      }
+      if (err instanceof Error) return rejectWithValue(err.message);
+      return rejectWithValue("Login failed");
+    }
+  }
+);
+
+export const logoutUser = createAsyncThunk<
+  unknown,
+    void,
+  { rejectValue: string }
+>("auth/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await logoutApi();
+      setAccessToken(null)
+      return res.data;
     } catch (err: unknown) {
       if (axios.isAxiosError<ErrorResponse>(err)) {
         return rejectWithValue(err.response?.data?.message ?? "Login failed");

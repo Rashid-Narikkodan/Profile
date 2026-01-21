@@ -51,8 +51,8 @@ const ErrorState = () => (
 /* --------------------- Background Glows --------------------- */
 const BackgroundGlows = () => (
   <div className="absolute inset-0 pointer-events-none">
-    <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-purple-700/20 rounded-full blur-3xl animate-pulse-slow" />
-    <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-indigo-700/15 rounded-full blur-3xl animate-pulse-slow delay-1000" />
+    <div className="absolute -top-40 -left-40 w-125 h-125 bg-purple-700/20 rounded-full blur-3xl animate-pulse-slow" />
+    <div className="absolute -bottom-40 -right-40 w-160 h-125 bg-indigo-700/15 rounded-full blur-3xl animate-pulse-slow delay-1000" />
     <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-fuchsia-600/10 rounded-full blur-3xl animate-pulse-slow delay-2000" />
   </div>
 );
@@ -68,12 +68,12 @@ type ProfileCardProps = {
   };
 };
 const ProfileCard = ({ user }: ProfileCardProps) => (
-  <div className="bg-gradient-to-b from-purple-900/60 to-indigo-950/70 backdrop-blur-xl
+  <div className="bg-linear-to-b from-purple-900/60 to-indigo-950/70 backdrop-blur-xl
                   rounded-3xl border border-white/10 shadow-2xl
                   p-10 text-center max-w-md mx-auto">
     {/* Avatar */}
     <div className="relative mx-auto w-40 h-40 mb-8">
-      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 blur-2xl opacity-50 animate-pulse" />
+      <div className="absolute inset-0 rounded-full bg-linear-to-br from-purple-500 to-indigo-600 blur-2xl opacity-50 animate-pulse" />
       <img
         src={
           user?.avatar?.url ||
@@ -149,11 +149,11 @@ type ProfileDetailsProps = {
 };
 const ProfileDetails = ({ user }: ProfileDetailsProps) => (
   <div
-    className="bg-gradient-to-br from-purple-950/50 via-indigo-950/50 to-gray-950/70
+    className="bg-linear-to-br from-purple-950/50 via-indigo-950/50 to-gray-950/70
                backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl
                p-12"
   >
-    <h2 className="text-3xl font-semibold mb-10 bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">
+    <h2 className="text-3xl font-semibold mb-10 bg-linear-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">
       Profile Information
     </h2>
 
@@ -197,7 +197,7 @@ const InfoField = ({ label, value = '—', capitalize = false }: InfoFieldProps)
       {label}
     </dt>
     <dd
-      className={`text-lg font-medium text-gray-100 break-words ${
+      className={`text-lg font-medium text-gray-100 wrap-break-words ${
         capitalize ? 'capitalize' : ''
       }`}
     >
