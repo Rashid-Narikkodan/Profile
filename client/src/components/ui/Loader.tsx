@@ -1,8 +1,8 @@
 
 const Loader = () => {
   return (
-    <div className="flex items-center justify-center min-h-50">
-      <div className="relative w-16 h-16">
+    <div className="flex items-center justify-center bg-black/50 h-screen absolute left-0 top-0 bottom-0 right-0">
+      <div className="relative w-14 h-14">
         {/* Main spinning circle */}
         <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-purple-700 animate-spin"></div>
         
