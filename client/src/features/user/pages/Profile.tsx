@@ -6,10 +6,11 @@ import { ArrowLeftCircle } from "lucide-react";
 import ProfileDetails from "../components/ProfileDetails";
 import ProfileCard from "../components/ProfileCard";
 import { useNavigate } from "react-router-dom";
+import Notify from "../../../components/ui/Notify";
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch();
-  const { data: user, error, status } = useAppSelector((state) => state.user);
+  const { data: user, fetchError, fetchStatus } = useAppSelector((state) => state.user);
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -18,8 +19,8 @@ export default function ProfilePage() {
 
   if(!user) return
 
-  if (status === 'loading') return <Loader />;
-  if (error) return <ErrorState />;
+  if (fetchStatus === 'loading') return <Loader fullScreen={true} />;
+  if (fetchError) return <Notify message={fetchError} type="error" onClose={()=>{}} />;
 
   return (
     <div className="min-h-screen w-screen rounded bg-gray-950 text-gray-100 relative overflow-hidden">
@@ -43,14 +44,6 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-
-/* --------------------- Error --------------------- */
-const ErrorState = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-950 text-red-400">
-    Failed to load profile
-  </div>
-);
 
 /* --------------------- Background Glows --------------------- */
 const BackgroundGlows = () => (

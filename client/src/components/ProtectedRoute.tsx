@@ -7,7 +7,7 @@ const ProtectedRoute = () => {
 
   // 1. Wait until bootstrapAuth resolves
   if ( status === "loading") {
-    return <Loader /> // show a spinner or blank screen
+    return <Loader fullScreen={true} /> // show a spinner or blank screen
   }
 
   // 2. Only redirect if user is truly unauthenticated

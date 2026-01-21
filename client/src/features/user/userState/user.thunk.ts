@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { Avatar, PublicUser } from "../../../types/user";
-import { getUser,editUser } from "../../../api/user";
+import { getUser,editUser, deleteAvatarApi } from "../../../api/user";
 import type { EditUserInput } from "../../../types/user";
 import api from "../../../api/axios";
 
@@ -86,6 +86,34 @@ export const uploadUserAvatar = createAsyncThunk<
 
 
       return res.data.avatar;
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(
+          err.response?.data?.message ?? "Avatar upload failed"
+        );
+      }
+
+      if (err instanceof Error) {
+        return rejectWithValue(err.message);
+      }
+
+      return rejectWithValue("Avatar upload failed");
+    }
+  }
+);
+
+
+export const deleteAvatar = createAsyncThunk<
+  Avatar,          // fulfilled return type
+  void,          // argument type
+  { rejectValue: string }
+>(
+  "user/uploadAvatar",
+  async (_, { rejectWithValue }) => {
+    try {
+  
+      const res = await deleteAvatarApi()
+      return res.data;
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         return rejectWithValue(
