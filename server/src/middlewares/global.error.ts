@@ -7,9 +7,13 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
   const statusCode = isAppError ? err.statusCode : 500
   const message = isAppError ? err.message : 'Internal server error'
 
-  console.log('isAppError -', isAppError)
-  console.log('statusCode -', statusCode)
-  console.log('message -',message)
+  console.log('--------------------------------')
+  console.log('isAppError - ', isAppError)
+  console.log('statusCode - ', statusCode)
+  console.log('message - ',message)
+  console.log('--------------------------------')
+  console.log('error - ',err)
+  console.log('--------------------------------')
   res.status(statusCode).json({
     success: false,
     message,

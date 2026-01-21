@@ -1,14 +1,15 @@
-
-export type PublicUser = {
-  _id: string;
+export interface Avatar{
+    url:string;
+    publicId:string
+}
+export interface PublicUser {
+  id: string;
   name: string;
   email: string;
-  phone?: string;
-  role: "admin" | "user";
-  status: "active" | "suspended";
-  lastLoginAt?: Date;
-  refreshToken?: string;
+  avatar?:Avatar;
+  phone?:string;
+  role: 'user' | 'admin';
+  status: 'active' | 'inactive';
   createdAt: Date;
   updatedAt: Date;
-};
-
+}

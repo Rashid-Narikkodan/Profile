@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { AuthUser } from "../../../types/auth";
-import { registerUser } from "./auth.thunk";
+import { loginUser, registerUser } from "./auth.thunk";
 
 interface AuthState {
   user: AuthUser | null;
@@ -21,7 +21,8 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout:()=>initialState
+    logout:()=>initialState,
+    refresh:(state,action)=>{state.accessToken = action.payload}
   },
 extraReducers: (builder) => {
   builder
@@ -40,8 +41,24 @@ extraReducers: (builder) => {
       state.status = 'unauthenticated'
       state.error = action.payload ?? 'Registration failed'
     })
+  builder
+    .addCase(loginUser.pending, (state) => {
+      state.status = 'loading'
+      state.error = null
+    })
+    .addCase(loginUser.fulfilled, (state, action) => {
+      state.status = 'authenticated'
+      state.user = action.payload.user
+      state.accessToken = action.payload.accessToken
+      state.error=null
+    })
+    .addCase(loginUser.rejected, (state, action) => {
+      console.log("rejected ", action.payload)
+      state.status = 'unauthenticated'
+      state.error = action.payload ?? 'Registration failed'
+    })
 }
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, refresh } = authSlice.actions;
 export default authSlice.reducer;

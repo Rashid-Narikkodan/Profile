@@ -100,7 +100,7 @@ export const refreshController = async (
     
     res.cookie("refreshToken", newRefreshToken, {
     httpOnly: true,
-    secure: true,
+    secure: false,
     sameSite: "strict",
     path: "/auth/refresh",
     maxAge: 7 * 24 * 60 * 60 * 1000,

@@ -4,7 +4,7 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { loginUser } from "../authState/auth.thunk";
-import { validateLogin, type LoginError } from "../authState/auth.validation";
+import { validateLogin, type LoginError } from "../auth.validation";
 
 type Props = {
   onClose: () => void;

@@ -27,4 +27,30 @@ api.interceptors.request.use(config => {
   return config
 })
 
+api.interceptors.response.use(
+  (response)=>response,
+  async (error) => {
+    const originalRequest = error.config
+    // If access token expired
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // Call refresh endpoint
+        const res = await api.post("/auth/refresh");
+        const newToken = res.data.accessToken;
+        setAccessToken(newToken);
+        // Retry original request with new token
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return api(originalRequest);
+      } catch {
+        // Refresh failed → logout
+        return Promise.reject(error);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+)
+
 export default api;

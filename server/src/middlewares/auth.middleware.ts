@@ -36,7 +36,7 @@ export const authMiddleware = (
   try {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET!
+      process.env.JWT_ACCESS_SECRET!
     ) as JwtPayload;
 
     // 4. Attach trusted context
