@@ -127,7 +127,7 @@ const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "strict" as const,
-  path: "/api/auth/refresh",
+  path: "/",
 };
 
 export const logoutController = async (
