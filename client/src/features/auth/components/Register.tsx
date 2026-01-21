@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {
   validateRegister,
   type RegisterErrors,
-} from "../authState/auth.validation";
+} from "../auth.validation";
 
 const RegisterModal: React.FC<{
   onClose: () => void;
@@ -57,7 +57,6 @@ const RegisterModal: React.FC<{
     if (registerUser.fulfilled.match(result)) {
       navigate("/home");
       onClose();
-      onOpenLogin();
     }
   };
 

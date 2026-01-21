@@ -55,7 +55,7 @@ export const loginUser = createAsyncThunk<
   LoginInput,
   { rejectValue: string }
 >(
-  "auth/registerUser",
+  "auth/loginUser",
   async (data, { rejectWithValue }) => {
     try {
       const res = await login(data)

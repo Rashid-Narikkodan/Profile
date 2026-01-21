@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import Signin from "../components/Signin";
 import Register from "../components/Register";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../../hooks/redux";
 
 const Auth: React.FC = () => {
   const [mode, setMode] = useState<"login" | "register">("login");
     const navigate = useNavigate()
+    const user = useAppSelector(state=>state.auth.user)
+    if(user){
+      navigate('/home')
+    }
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-linear-to-br from-black via-gray-900 to-purple-900 relative overflow-hidden">
 

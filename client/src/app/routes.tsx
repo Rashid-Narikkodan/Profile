@@ -5,6 +5,8 @@ import Home from "../pages/Home"
 import Auth from "../features/auth/pages/Auth"
 import RequireAuth from "../components/RequireAuth"
 import PublicOnly from "../components/PublicOnly"
+import Profile from "../features/user/pages/Profile"
+import ProfileEdit from "../features/user/components/ProfileEdit"
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +24,8 @@ export const router = createBrowserRouter([
         element: <RequireAuth />,
         children: [
           { path: "/home", element: <Home /> },
+          { path: "/me", element: <Profile /> },
+          { path: "/edit/me", element: <ProfileEdit /> },
         ],
       },
     ],

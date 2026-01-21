@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import type { RootState } from "../store/type";
+import type { RootState } from "../app/store";
 
 const Home: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -10,10 +10,10 @@ const Home: React.FC = () => {
   if (!user) return null; // protected route already handles redirect
 
   return (
-    <div className="w-full h-full">
+    <>
 
       {/* Page shell */}
-      <div className="relative w-full h-full rounded-xl overflow-hidden bg-linear-to-br from-black via-gray-900 to-purple-900">
+      <div className="relative w-full h-screen rounded-xl overflow-hidden bg-linear-to-br from-black via-gray-900 to-purple-900">
 
         {/* Ambient glow */}
         <div className="absolute -top-32 -left-32 w-[400px] h-[400px] bg-purple-700 rounded-full blur-[120px] opacity-25" />
@@ -44,7 +44,7 @@ const Home: React.FC = () => {
                 View and manage your account information and security.
               </p>
               <button
-                onClick={() => navigate("/profile")}
+                onClick={() => navigate("/me")}
                 className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-white transition"
               >
                 Open Profile
@@ -91,7 +91,7 @@ const Home: React.FC = () => {
 
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

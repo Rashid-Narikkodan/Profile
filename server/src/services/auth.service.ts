@@ -56,7 +56,7 @@ export const registerUser = async (input: RegisterInput) => {
 
   //create a public user data
   const publicUser: AuthUser = {
-    id: user._id.toString(),
+    id: user.id,
     email: user.email,
     name: user.name,
     role: user.role,
@@ -87,6 +87,7 @@ export const loginUser = async (data: LoginInput) => {
   // password verification (FIXED)
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) {
+    console.log(isValid)
     throw new AppError("Invalid credentials", 400);
   }
 
@@ -102,7 +103,7 @@ export const loginUser = async (data: LoginInput) => {
   });
 
   const publicUser: PublicUser = {
-    _id: user._id.toString(),
+    id: user.id,
     email: user.email,
     phone: user.phone,
     name: user.name,
