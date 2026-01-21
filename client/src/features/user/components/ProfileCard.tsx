@@ -21,7 +21,7 @@ const ProfileCard = ({ user }: ProfileCardProps) => (
       <img
         src={
           user?.avatar?.url ||
-          "https://ui-avatars.com/api/?name=User&background=6b46c1&color=fff&size=160"
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name||'User')}&background=6b46c1&color=fff&size=160`
         }
         alt={user?.name || "User"}
         className="relative w-40 h-40 rounded-full object-cover
@@ -56,7 +56,9 @@ const ProfileCard = ({ user }: ProfileCardProps) => (
             : "—"}
         </span>
       </div>
+      <div className="mt-2">
       <LogoutButton />
+      </div>
     </div>
   </div>
 );

@@ -10,7 +10,7 @@ const LogoutButton = () => {
     navigate("/");
   };
   return (
-    <button className="bg-purple-700 rounded-md px-8 py-3" onClick={handleLogout}> Logout </button>
+    <button className="bg-purple-700 rounded-full px-6 py-3 font-bold text-sm text-white" onClick={handleLogout}> Logout </button>
   )
 }
 
