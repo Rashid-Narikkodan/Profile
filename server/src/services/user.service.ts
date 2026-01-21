@@ -19,6 +19,7 @@ export const editUser = async (userId: string, data: EditUserInput) => {
     });
     if (existingUser) throw new AppError("Email already in use");
     validateEmail(data.email)
+    updateData.email = data.email;
   }
   if (data.phone){
     validatePhone(data.phone)
