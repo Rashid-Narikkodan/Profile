@@ -16,8 +16,8 @@ const Home: React.FC = () => {
       <div className="relative w-full h-screen rounded-xl overflow-hidden bg-linear-to-br from-black via-gray-900 to-purple-900">
 
         {/* Ambient glow */}
-        <div className="absolute -top-32 -left-32 w-[400px] h-[400px] bg-purple-700 rounded-full blur-[120px] opacity-25" />
-        <div className="absolute -bottom-37.5 right-[-150px] w-[400px] h-[400px] bg-indigo-700 rounded-full blur-[120px] opacity-20" />
+        <div className="absolute -top-32 -left-32 w-100 h-100 bg-purple-700 rounded-full blur-[120px] opacity-25" />
+        <div className="absolute -bottom-37.5 -right-37 w-100 h-100 bg-indigo-700 rounded-full blur-[120px] opacity-20" />
 
         {/* Content */}
         <div className="relative z-10 p-10 flex flex-col gap-10">

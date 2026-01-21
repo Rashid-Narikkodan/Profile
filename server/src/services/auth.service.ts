@@ -162,7 +162,7 @@ export const refreshTokens = async (
   }
 
   // 3. Rotate token (delete old session)
-  await RefreshToken.deleteOne({ _id: session._id });
+  // await RefreshToken.findByIdAndDelete(session.id)
   // 4. Issue new tokens
   const accessToken = signAccessToken(userId,role);
 
@@ -184,4 +184,19 @@ export const refreshTokens = async (
     accessToken,
     refreshToken: newRefreshToken,
   };
+};
+
+export const logout = async (refreshToken?: string): Promise<void> => {
+  // No token → already logged out
+  if (!refreshToken) return;
+
+  try {
+    const payload = verifyRefreshToken(refreshToken);
+    const { sub: userId, tokenId } = payload;
+
+    await RefreshToken.deleteOne({ userId, tokenId });
+  } catch {
+    // Token invalid, expired, or reused
+    // Treat as logged out anyway (idempotent)
+  }
 };

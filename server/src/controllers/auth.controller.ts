@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { RegisterInput, LoginInput } from "../types/auth";
-import { registerUser, loginUser, authUser, refreshTokens } from "../services/auth.service";
-import { signAccessToken } from "../services/jwt.service";
+import { registerUser, loginUser, logout, authUser, refreshTokens } from "../services/auth.service";
 
 export const register = async (
   req: Request,
@@ -109,11 +108,11 @@ export const refreshController = async (
     const { accessToken, refreshToken: newRefreshToken } =
       await refreshTokens(refreshToken)
 
-    res.cookie("refreshToken", newRefreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      path: "/auth/refresh",
+      // path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 
@@ -122,3 +121,28 @@ export const refreshController = async (
     next(error)
   }
 }
+
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict" as const,
+  path: "/api/auth/refresh",
+};
+
+export const logoutController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+
+    await logout(refreshToken);
+
+    res.clearCookie("refreshToken", cookieOptions);
+    return res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+};

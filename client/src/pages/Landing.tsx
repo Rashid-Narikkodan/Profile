@@ -5,14 +5,11 @@ import type { RootState } from "../app/store";
 const Landing = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
-    if (user) {
-      navigate('/home')
-    }
   const handlePrimaryAction = () => {
-    if (user) {
-      navigate('/home')
-    } else {
+    if (!user) {
       navigate("/auth");
+    }else{
+      navigate("/home");
     }
   };
 
