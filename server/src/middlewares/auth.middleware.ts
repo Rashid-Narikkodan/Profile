@@ -12,9 +12,7 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
-  console.log("Hit auth middleware");
 
-  // 1. Header presence
   if (!authHeader) {
     return res.status(401).json({
       success: false,
@@ -22,7 +20,6 @@ export const authMiddleware = (
     });
   }
 
-  // 2. Bearer format
   const [scheme, token] = authHeader.split(" ");
 
   if (scheme !== "Bearer" || !token) {
@@ -32,22 +29,20 @@ export const authMiddleware = (
     });
   }
 
-  // 3. Verify token
   try {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_ACCESS_SECRET!
+      process.env.JWT_ACCESS_SECRET!,
+      { algorithms: ["HS256"] }
     ) as JwtPayload;
 
-    // 4. Attach trusted context
     req.user = {
       id: decoded.sub,
       role: decoded.role,
     };
 
     next();
-  } catch(error) {
-    console.log(error)
+  } catch {
     return res.status(401).json({
       success: false,
       message: "Invalid or expired token",

@@ -60,56 +60,65 @@ export const login = async (
   }
 };
 
-export const refresh = async (req: Request, res: Response) => {
+export const getMe = async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized",
+    });
+  }
+
   try {
-    if (!req.user) throw new Error("User not Authenticated");
     const { id } = req.user;
 
-    // Fetch fresh user data from DB
     const user = await authUser(id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
     return res.status(200).json({
       success: true,
       user,
     });
-  } catch (err: any) {
+  } catch (error) {
     return res.status(500).json({
       success: false,
-      message: err.message || "Server error",
+      message: "Internal server error",
     });
   }
 };
 
 
+
 export const refreshController = async (
   req: Request,
   res: Response,
-  next:NextFunction
+  next: NextFunction
 ) => {
-  try{
+  try {
+    const refreshToken = req.cookies?.refreshToken
 
-    const refreshToken = req.cookies?.refreshToken;
-    
     if (!refreshToken) {
-      return res
-      .status(401)
-      .json({ message: "Missing refresh token" });
+      return res.status(401).json({ message: "Missing refresh token" })
     }
-    
-    const { accessToken, refreshToken: newRefreshToken } = await refreshTokens(refreshToken);
-    
+
+    const { accessToken, refreshToken: newRefreshToken } =
+      await refreshTokens(refreshToken)
+
     res.cookie("refreshToken", newRefreshToken, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "strict",
-    path: "/auth/refresh",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
-  
-  return res.status(200).json({
-    accessToken,
-  });
-}catch(error){
-  next(error)
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/auth/refresh",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+
+    return res.status(200).json({ accessToken })
+  } catch (error) {
+    next(error)
+  }
 }
-};

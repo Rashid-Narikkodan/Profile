@@ -62,7 +62,7 @@ export const registerUser = async (input: RegisterInput) => {
     role: user.role,
     status: user.status,
   };
-
+  
   //return user data
   return { user: publicUser, token: { accessToken, refreshToken } };
 };
@@ -70,12 +70,12 @@ export const registerUser = async (input: RegisterInput) => {
 //  2   -------Login Service----------
 export const loginUser = async (data: LoginInput) => {
   const { email, password } = data;
-
+  
   // validation
   if (!email.trim() || !password.trim()) {
     throw new AppError("Email and password are required", 400);
   }
-
+  
   validateEmail(email);
 
   // find user
@@ -90,7 +90,7 @@ export const loginUser = async (data: LoginInput) => {
     console.log(isValid)
     throw new AppError("Invalid credentials", 400);
   }
-
+  
   // issue tokens
   const accessToken = signAccessToken(user.id, user.role);
   const { refreshToken, tokenId } = signRefreshToken(user.id,user.role);
@@ -101,18 +101,15 @@ export const loginUser = async (data: LoginInput) => {
     tokenId,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
   });
-
-  const publicUser: PublicUser = {
+  
+  const publicUser: AuthUser = {
     id: user.id,
     email: user.email,
-    phone: user.phone,
     name: user.name,
-    role: user.role,
     status: user.status,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
+    role: user.role,
   };
-
+  
   return {
     user: publicUser,
     token: {
@@ -126,9 +123,18 @@ export const loginUser = async (data: LoginInput) => {
 
 export const authUser = async (id: string) => {
   const user = await User.findById(id).select("-password");
-  if (!user) throw new AppError("User not found", 400);
-  return user;
+
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    status: user.status,
+    role: user.role,
+  };
 };
+
 
 //  3  --------------Reresh Token---------------
 export const refreshTokens = async (
