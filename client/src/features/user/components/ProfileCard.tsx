@@ -23,13 +23,12 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
   const dispatch = useAppDispatch();
   const isAdmin = useAppSelector(state=>state.user.data?._id !== user._id)
   const isUploadingByAdmin = useAppSelector(state=>state.admin.updateStatus === 'loading')
-  const {avatarError,avatarStatus}=useAppSelector(state=>state.user)
+  const {avatarStatus}=useAppSelector(state=>state.user)
   const isUploading = avatarStatus === 'loading' || isUploadingByAdmin
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   /* --------------------- Helpers --------------------- */
   const resetSelection = () => {
@@ -59,12 +58,11 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
 
     const validationError = validateFile(selectedFile);
     if (validationError) {
-      setError(validationError);
+      dispatch(showToast(validationError,'error'));
       resetSelection();
       return;
     }
 
-    setError(null);
     resetSelection(); // cleanup previous preview if any
 
     const previewUrl = URL.createObjectURL(selectedFile);
@@ -79,17 +77,12 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
       const result = await dispatch(updateAvatarByAdmin({file,userId:user._id}));
       if (updateAvatarByAdmin.fulfilled.match(result)) {
         resetSelection();
-      } else {
-        dispatch(showToast("Avatar upload failed",'error'));
       }
     }else{
       const result = await dispatch(uploadUserAvatar(file));
       if (uploadUserAvatar.fulfilled.match(result)) {
         resetSelection();
-      } else {
-        dispatch(showToast("Avatar upload failed",'error'));
       }
-
     }
   };
 
@@ -120,11 +113,6 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
       if (preview) URL.revokeObjectURL(preview);
     };
   }, [preview]);
-
-  if(avatarError){
-    dispatch(showToast(avatarError),'error')
-  }
-
   /* --------------------- Render --------------------- */
   return (
     <div
@@ -132,11 +120,6 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
                  rounded-3xl border border-white/10 shadow-2xl
                  p-10 text-center max-w-md mx-auto"
     >
-      {error && (
-        <div className="bg-red-400/70 border border-red-800 rounded p-4 mb-2">
-          {error}
-        </div>
-      )}
 
     {/* Avatar */}
 <button

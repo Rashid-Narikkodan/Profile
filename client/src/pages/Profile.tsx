@@ -7,7 +7,6 @@ import Loader from "@/components/ui/Loader";
 import { fetchUserByAdmin } from "@/features/user/adminState/admin.thunk";
 import ProfileCard from "@/features/user/components/ProfileCard";
 import ProfileDetails from "@/features/user/components/ProfileDetails";
-import { showToast } from "@/app/slices/toastSlice";
 import { BackgroundGlows } from "@/features/user/components/BackgroundGlow";
 
 
@@ -17,7 +16,7 @@ const dispatch = useAppDispatch();
 const { id } = useParams();
 const isAdmin = Boolean(id);
 
-const { data:user, fetchError, fetchStatus } = useAppSelector((state) =>
+const { data:user, fetchStatus } = useAppSelector((state) =>
   isAdmin ? state.admin : state.user
 );
 
@@ -32,11 +31,6 @@ useEffect(() => {
 
 if (fetchStatus === "loading") {
   return <Loader fullScreen={true} />;
-}
-
-if (fetchError) {
-  dispatch(showToast(fetchError, "error"));
-  return null;
 }
 
 if (!user) {

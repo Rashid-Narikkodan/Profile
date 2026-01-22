@@ -4,10 +4,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getMeApi, updateMeApi, deleteMyAvatarApi } from "@/api/user";
 import { normalizeApiError } from "@/utils/ApiError";
 import api from "@/api/axios";
-
+import { showToast } from "@/app/slices/toastSlice";
 
 type FetchUserResponse = {
-    success: true
+  success: true;
   user: PublicUser;
 };
 
@@ -15,72 +15,69 @@ export const fetchUser = createAsyncThunk<
   FetchUserResponse,
   void,
   { rejectValue: string }
->(
-  "user/fetchUser",
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await getMeApi()
-      return res.data;
-    } catch (err: unknown) {
-      return rejectWithValue(normalizeApiError(err))
-    }
-    }
-);
+>("user/fetchUser", async (_, { rejectWithValue, dispatch }) => {
+  try {
+    const res = await getMeApi();
+    return res.data;
+  } catch (err: unknown) {
+    const error = normalizeApiError(err);
+    dispatch(showToast(error, "error"));
+    return rejectWithValue(error);
+  }
+});
 
-export const updateUser= createAsyncThunk<
+export const updateUser = createAsyncThunk<
   EditUserInput,
   EditUserInput,
   { rejectValue: string }
->('user/updateUser',
-   async (data,{rejectWithValue})=>{
-    try {
-      const res = await updateMeApi(data)
-      return res.data.user;
-  }catch(err:unknown){
-      return rejectWithValue(normalizeApiError(err))
-    }
-})
+>("user/updateUser", async (data, { rejectWithValue, dispatch }) => {
+  try {
+    const res = await updateMeApi(data);
+    dispatch(showToast("User info updated successfully", "success"));
+    return res.data.user;
+  } catch (err: unknown) {
+    const error = normalizeApiError(err);
+    dispatch(showToast(error, "error"));
+    return rejectWithValue(error);
+  }
+});
 
 export const uploadUserAvatar = createAsyncThunk<
-  Avatar,          // fulfilled return type
-  File,          // argument type
+  Avatar, // fulfilled return type
+  File, // argument type
   { rejectValue: string }
->(
-  "user/uploadAvatar",
-  async (file, { rejectWithValue }) => {
-    try {
-      const formData = new FormData();
-      formData.append("avatar", file);
+>("user/uploadAvatar", async (file, { rejectWithValue, dispatch }) => {
+  try {
+    const formData = new FormData();
+    formData.append("avatar", file);
 
-      const res = await api.post("/user/me/avatar", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-
-      return res.data.avatar;
-    } catch (err: unknown) {
-      return rejectWithValue(normalizeApiError(err))
-    }
+    const res = await api.post("/user/me/avatar", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    
+    dispatch(showToast("User Avatar updated successfully", "success"));
+    return res.data.avatar;
+  } catch (err: unknown) {
+    const error = normalizeApiError(err);
+    dispatch(showToast(error, "error"));
+    return rejectWithValue(error);
   }
-);
-
+});
 
 export const deleteAvatar = createAsyncThunk<
-  Avatar,          // fulfilled return type
-  void,          // argument type
+  Avatar,
+  void,
   { rejectValue: string }
->(
-  "user/deleteAvatar",
-  async (_, { rejectWithValue }) => {
-    try {
-  
-      const res = await deleteMyAvatarApi()
-      return res.data;
-    } catch (err: unknown) {
-      return rejectWithValue(normalizeApiError(err))
-    }
+>("user/deleteAvatar", async (_, { rejectWithValue, dispatch }) => {
+  try {
+    const res = await deleteMyAvatarApi();
+    dispatch(showToast("User's Avatar Deleted Successfully", "success"));
+    return res.data;
+  } catch (err: unknown) {
+    const error = normalizeApiError(err);
+    dispatch(showToast(error, "error"));
+    return rejectWithValue(error);
   }
-);
-
+});

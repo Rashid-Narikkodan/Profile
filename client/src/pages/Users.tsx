@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import Pagination from "@/components/ui/Pagination";
 import UserCard from "@/features/user/components/UserCard";
-import { showToast } from "@/app/slices/toastSlice";
 import RegisterModal from "@/features/auth/components/Register";
 import {
   fetchUsersByAdmin,
@@ -53,7 +52,6 @@ const Users: React.FC = () => {
 
   const handleToggleStatus = (id: string) => {
     dispatch(toggleUserStatusByAdmin(id));
-    dispatch(showToast("User status Updtaed",'success'));
   };
 
 

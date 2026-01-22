@@ -5,7 +5,7 @@ import api from "./axios";
 
 
 export const createUserByAdminApi = (data: RegisterInput) =>
-  api.post("/admin/users", data);
+  api.post("/admin//users/add", data);
 
 export const getUsersByAdminApi = (params?: {
   search?: string;
@@ -24,7 +24,7 @@ export const updateUserByAdminApi = (
   api.patch(`/admin/users/${userId}`, data);
 
 export const deleteUserByAdminApi = (userId: string) =>
-  api.delete(`/admin/users/${userId}`);
+  api.delete(`/admin/users/${userId}/delete`);
 
 export const toggleUserStatusByAdminApi = (userId: string) =>
   api.patch(`/admin/users/${userId}/status`);
@@ -39,10 +39,13 @@ export const updateUserAvatarByAdminApi = (
 ) => {
   const formData = new FormData();
   formData.append("avatar", file);
-
   return api.post(
     `/admin/users/${userId}/avatar`,
-    formData
+    formData,{
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
   );
 };
 

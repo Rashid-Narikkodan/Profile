@@ -97,6 +97,8 @@ export const updateAvatarByAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
+    console.log("req.file:", req.file);
+  console.log("req.body:", req.body);
     const userId = req.params.id
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
