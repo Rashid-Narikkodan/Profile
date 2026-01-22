@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { RegisterInput, LoginInput } from "../types/auth";
 import { registerUser, loginUser, logout, authUser, refreshTokens } from "../services/auth.service";
+import { AppError } from "../utils/AppError";
 
 export const register = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  try {
     const data: RegisterInput = req.body;
     const { user, token } = await registerUser(data);
 
@@ -26,9 +26,7 @@ export const register = async (
         accessToken: token.accessToken,
         message: "New User Registered",
       });
-  } catch (err: any) {
-    next(err);
-  }
+
 };
 
 export const login = async (
@@ -36,7 +34,6 @@ export const login = async (
   res: Response,
   next: NextFunction,
 ) => {
-  try {
     const data: LoginInput = req.body;
 
     const { user, token } = await loginUser(data);
@@ -54,41 +51,20 @@ export const login = async (
       accessToken: token.accessToken,
       message: "User Logged in successfully",
     });
-  } catch (err: any) {
-    next(err);
-  }
 };
 
-export const getMe = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return res.status(401).json({
-      success: false,
-      message: "Unauthorized",
-    });
-  }
-
-  try {
+export const getMe = async (req: Request, res: Response, next:NextFunction) => {
+  if (!req.user) throw new AppError("Unautherized",401)
     const { id } = req.user;
 
     const user = await authUser(id);
 
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "User not found",
-      });
-    }
+    if (!user) throw new AppError("Unautherized",401)
 
     return res.status(200).json({
       success: true,
       user,
     });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
-  }
 };
 
 
@@ -98,7 +74,6 @@ export const refreshController = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
     const refreshToken = req.cookies?.refreshToken
 
     if (!refreshToken) {
@@ -117,9 +92,6 @@ export const refreshController = async (
     })
 
     return res.status(200).json({ accessToken })
-  } catch (error) {
-    next(error)
-  }
 }
 
 
@@ -135,14 +107,10 @@ export const logoutController = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
     const refreshToken = req.cookies?.refreshToken;
 
     await logout(refreshToken);
 
     res.clearCookie("refreshToken", cookieOptions);
     return res.status(204).end();
-  } catch (err) {
-    next(err);
-  }
 };

@@ -81,7 +81,6 @@ export const createUser = async (
   res: Response,
   next: NextFunction,
 ) => {
-  try {
     const inputs: RegisterInput = req.body;
     const user = await createUserService(inputs);
 
@@ -91,9 +90,6 @@ export const createUser = async (
     success: true,
     user,
       });
-  } catch (err: any) {
-    next(err);
-  }
 };
 
 export const updateAvatarByAdmin = async (
@@ -101,7 +97,6 @@ export const updateAvatarByAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
     const userId = req.params.id
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -117,9 +112,6 @@ export const updateAvatarByAdmin = async (
       success: true,
       avatar
     });
-  } catch (error) {
-    next(error);
-  }
 };
 
 export const deleteAvatarByAdmin = async (req: Request, res: Response) => {

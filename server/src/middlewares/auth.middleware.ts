@@ -1,51 +1,40 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { AppError } from "../utils/AppError";
 
 interface JwtPayload {
   sub: string;
-  role: 'user'|'admin';
+  role: "user" | "admin";
+  status: "inactive" | "active";
 }
 
 export const authMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    return res.status(401).json({
-      success: false,
-      message: "Authorization header missing",
-    });
-  }
+  if (!authHeader) throw new AppError("Authorization header missing", 401);
 
   const [scheme, token] = authHeader.split(" ");
 
-  if (scheme !== "Bearer" || !token) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid authorization format",
-    });
-  }
+  if (scheme !== "Bearer" || !token)
+    throw new AppError("Invalid authorization format", 401);
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_ACCESS_SECRET!,
-      { algorithms: ["HS256"] }
-    ) as JwtPayload;
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET!, {
+      algorithms: ["HS256"],
+    }) as JwtPayload;
 
     req.user = {
       id: decoded.sub,
       role: decoded.role,
+      status: decoded.status,
     };
 
     next();
-  } catch {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid or expired token",
-    });
+  } catch (error) {
+    next(error);
   }
 };

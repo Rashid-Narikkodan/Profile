@@ -4,6 +4,7 @@ import Loader from "./ui/Loader"
 
 const ProtectedRoute = () => {
   const status = useAppSelector((state) => state.auth.status)
+  const userStatus = useAppSelector((state) => state.auth.user?.status)
 
   // 1. Wait until bootstrapAuth resolves
   if ( status === "loading") {
@@ -11,7 +12,7 @@ const ProtectedRoute = () => {
   }
 
   // 2. Only redirect if user is truly unauthenticated
-  if (status === "unauthenticated") {
+  if (status === "unauthenticated" || userStatus == 'inactive') {
     return <Navigate to="/auth" replace />
   }
 

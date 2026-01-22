@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { EditUserInput } from "../types/user";
 import { editUser, updateUserAvatar,getUserById, deleteAccountService,deleteAvatarService  } from "../services/user.service";
+import { AppError } from "../utils/AppError";
 
 export const editUserProfile = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  try {
     const userId = req.user?.id;
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -18,9 +18,7 @@ export const editUserProfile = async (
     const user = await editUser(userId, data);
 
     return res.status(200).json({success:true,user});
-  } catch (error:any) {
-    next(error)
-  }
+
 };
 
 export const updateAvatar = async (
@@ -28,7 +26,6 @@ export const updateAvatar = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
     const userId = req.user?.id;
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -44,25 +41,16 @@ export const updateAvatar = async (
       success: true,
       avatar
     });
-  } catch (error) {
-    next(error);
-  }
 };
 
 export const getUser = async (req: Request, res: Response, next: NextFunction) => {
-  try {
     const userId = req.user?.id;
 
-    if(!userId) throw new Error('User not Authenticated')
+    if(!userId) throw new AppError('User not Authenticated',401)
 
     const user = await getUserById(userId);
 
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
+    if (!user) throw new AppError('User not Found',404)
 
     // Return user (omit sensitive fields)
     const { password, ...safeUser } = user.toObject(); 
@@ -70,9 +58,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
       success: true,
       user: safeUser,
     });
-  } catch (err) {
-    next(err); // pass to global error handler
-  }
+
 };
 
 

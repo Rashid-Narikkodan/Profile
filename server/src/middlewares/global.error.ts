@@ -1,21 +1,67 @@
-import { AppError } from "../utils/AppError"
-import { Response, Request, NextFunction } from "express"
+import { Request, Response, NextFunction } from "express";
+import { AppError } from "../utils/AppError";
 
-export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+const isProduction = process.env.NODE_ENV === "production";
 
-  const isAppError = err instanceof AppError
-  const statusCode = isAppError ? err.statusCode : 500
-  const message = isAppError ? err.message : 'Internal server error'
+export const errorHandler = (
+  err: unknown,
+  req: Request,
+  res: Response,
+  _next: NextFunction
+): void => {
+  const timestamp = new Date().toISOString();
+  const method = req.method;
+  const path = req.originalUrl;
 
-  console.log('--------------------------------')
-  console.log('isAppError - ', isAppError)
-  console.log('statusCode - ', statusCode)
-  console.log('message - ',message)
-  console.log('--------------------------------')
-  console.log('error - ',err)
-  console.log('--------------------------------')
-  res.status(statusCode).json({
+  if (err instanceof AppError) {
+    console.log('\n')
+    console.error(
+      [
+        "---- APPLICATION ERROR ----",
+        `Time      : ${timestamp}`,
+        `Request   : ${method} ${path}`,
+        `Status    : ${err.statusCode}`,
+        `Message   : ${err.message}`,
+        !isProduction && err.stack
+        ? `Stack     :\n${err.stack}`
+        : null,
+        "---------------------------",
+      ]
+      .filter(Boolean)
+      .join("\n")
+    );
+    console.log('\n')
+
+    res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
+    });
+    return;
+  }
+
+  // ---------- Unknown / system errors ----------
+  const message =
+    err instanceof Error ? err.message : "Unknown error occurred";
+  const stack =
+    err instanceof Error ? err.stack : String(err);
+
+  console.error(
+    [
+      "---- UNHANDLED ERROR ----",
+      `Time      : ${timestamp}`,
+      `Request   : ${method} ${path}`,
+      `Message   : ${message}`,
+      !isProduction && stack
+        ? `Stack     :\n${stack}`
+        : null,
+      "-------------------------",
+    ]
+      .filter(Boolean)
+      .join("\n")
+  );
+
+  res.status(500).json({
     success: false,
-    message,
-  })
-}
+    message: "Internal server error",
+  });
+};

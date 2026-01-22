@@ -15,11 +15,12 @@ if (!process.env.JWT_REFRESH_SECRET) {
 }
 
 
-export const signAccessToken = (userId: string, role: ("user"|"admin")) => {
+export const signAccessToken = (userId: string,status:('active'|'inactive'), role: ("user"|"admin")) => {
   return jwt.sign(
     {
       sub: userId,
       role,
+      status,
     },
     ACCESS_SECRET,
     {
@@ -28,14 +29,15 @@ export const signAccessToken = (userId: string, role: ("user"|"admin")) => {
   );
 };
 
-export const signRefreshToken = (userId: string,role:("user"|"admin")) => {
+export const signRefreshToken = (userId: string,status:('inactive'|'active'),role:("user"|"admin")) => {
   const tokenId = crypto.randomUUID();
-
+  
   const refreshToken = jwt.sign(
     {
       sub: userId,
       tokenId,
       role,
+      status,
     },
     REFRESH_SECRET,
     {
@@ -53,6 +55,7 @@ export const verifyRefreshToken = (token: string) => {
   return jwt.verify(token, REFRESH_SECRET) as {
     sub: string;
     tokenId: string;
-    role:('admin'|"user")
+    role:('admin'|"user"),
+    status:('inactive'|'active')
   };
 };

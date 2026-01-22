@@ -3,6 +3,7 @@ declare namespace Express {
     user?: {
       id: string;
       role: "user" | "admin";
+      status: "inactive" | "active";
     };
     file?: Multer.File;
     files?: Multer.File[];

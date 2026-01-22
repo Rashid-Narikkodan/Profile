@@ -45,8 +45,8 @@ export const registerUser = async (input: RegisterInput) => {
   await user.save();
 
   //JWT access and refresh token optionally
-  const accessToken = signAccessToken(user.id, user.role);
-  const { refreshToken, tokenId } = signRefreshToken(user.id,user.role);
+  const accessToken = signAccessToken(user.id, user.status, user.role);
+  const { refreshToken, tokenId } = signRefreshToken(user.id,user.status,user.role);
 
   await RefreshToken.create({
     userId: user._id,
@@ -80,9 +80,12 @@ export const loginUser = async (data: LoginInput) => {
 
   // find user
   const user = await User.findOne({ email });
+
   if (!user) {
     throw new AppError("Invalid credentials", 400);
   }
+
+  if(user.status == 'inactive') throw new AppError('Your account is blocked, Contact us',403)
 
   // password verification (FIXED)
   const isValid = await bcrypt.compare(password, user.password);
@@ -90,8 +93,8 @@ export const loginUser = async (data: LoginInput) => {
   
   
   // issue tokens
-  const accessToken = signAccessToken(user.id, user.role);
-  const { refreshToken, tokenId } = signRefreshToken(user.id,user.role);
+  const accessToken = signAccessToken(user.id, user.status, user.role);
+  const { refreshToken, tokenId } = signRefreshToken(user.id, user.status, user.role);
 
   // persist refresh session (CRITICAL)
   await RefreshToken.create({
@@ -147,7 +150,7 @@ export const refreshTokens = async (
     throw new AppError("Invalid refresh token", 401);
   }
 
-  const { sub: userId, tokenId,role  } = payload;
+  const { sub: userId, tokenId,role, status  } = payload;
 
   // 2. Find refresh session
   const session = await RefreshToken.findOne({
@@ -162,12 +165,12 @@ export const refreshTokens = async (
   // 3. Rotate token (delete old session)
   // await RefreshToken.findByIdAndDelete(session.id)
   // 4. Issue new tokens
-  const accessToken = signAccessToken(userId,role);
+  const accessToken = signAccessToken(userId,status,role);
 
   const {
     refreshToken: newRefreshToken,
     tokenId: newTokenId,
-  } = signRefreshToken(userId,role);
+  } = signRefreshToken(userId, status, role);
 
   // 5. Persist new refresh session
   await RefreshToken.create({
