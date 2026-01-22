@@ -1,11 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   getAllUsersService,
   getUserByIdService,
   toggleUserStatusService,
   updateUserService,
   deleteUserService,
+  createUserService,
 } from "../services/admin.service";
+import { RegisterInput } from "../types/auth";
 
 //get all users
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -70,4 +72,25 @@ export const deleteUser = async (req: Request, res: Response) => {
     success: true,
     message: "User deleted successfully",
   });
+};
+
+
+export const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const inputs: RegisterInput = req.body;
+    const user = await createUserService(inputs);
+
+    res
+      .status(201)
+      .json({
+    success: true,
+    user,
+      });
+  } catch (err: any) {
+    next(err);
+  }
 };

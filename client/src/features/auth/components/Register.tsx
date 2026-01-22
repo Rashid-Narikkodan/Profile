@@ -3,15 +3,18 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { registerUser } from "../authState/auth.thunk";
 import { useNavigate } from "react-router-dom";
+
 import {
   validateRegister,
   type RegisterErrors,
 } from "../auth.validation";
+import { createNewUser } from "../../user/userState/user.thunk";
 
 const RegisterModal: React.FC<{
   onClose: () => void;
-  onOpenLogin: () => void;
-}> = ({ onClose, onOpenLogin }) => {
+  onOpenLogin?: () => void;
+  role?:string
+}> = ({ onClose, onOpenLogin, role = 'user' }) => {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -53,11 +56,20 @@ const RegisterModal: React.FC<{
         return;
       }
     setErrors({});
-    const result = await dispatch(registerUser(form));
-
-    if (registerUser.fulfilled.match(result)) {
-      navigate("/home");
-      onClose();
+    if(role === 'admin'){
+      const result = await dispatch(createNewUser(form)); 
+      if (createNewUser.fulfilled.match(result)) {
+        navigate("/users");
+        onClose();
+        return
+      }
+    }else{
+      const result = await dispatch(registerUser(form));
+      
+      if (registerUser.fulfilled.match(result)) {
+        navigate("/home");
+        onClose();
+      }
     }
   };
 
@@ -75,7 +87,7 @@ const RegisterModal: React.FC<{
         <div className="absolute -top-24 -left-24 w-64 h-64 bg-purple-700 rounded-full blur-3xl opacity-30" />
         <div className="relative p-8">
           <h2 className="text-2xl font-bold text-white mb-2">
-            Create your account
+            {`${role=='admin'?"Create New User":"Create your account"}`}
           </h2>
 
           <p className="text-gray-400 mb-6">
@@ -166,18 +178,21 @@ error&&
               {isLoading ? "Creating..." : "Create Account"}
             </button>
           </form>
+{
+  role !== 'admin' &&
 
           <p className="mt-6 text-sm text-gray-400 text-center">
             Already have an account?{" "}
             <button
               onClick={() => {
-                onOpenLogin();
+                onOpenLogin?.();
               }}
               className="text-purple-400 hover:text-purple-300 underline underline-offset-2"
-            >
+              >
               Sign in
             </button>
           </p>
+            }
 
           <button
             onClick={onClose}

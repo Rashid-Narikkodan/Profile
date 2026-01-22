@@ -3,7 +3,7 @@ export interface Avatar{
     publicId:string
 }
 export interface PublicUser {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   avatar?:Avatar;

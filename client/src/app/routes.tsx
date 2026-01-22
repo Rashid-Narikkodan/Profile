@@ -6,6 +6,7 @@ import Auth from "../features/auth/pages/Auth"
 import ProtoctedRoute from "../components/ProtectedRoute"
 import PublicRoute from "../components/PublicRoute"
 import Profile from "../features/user/pages/Profile"
+import Users from "../features/user/pages/Users"
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
         children: [
           { path: "/home", element: <Home /> },
           { path: "/me", element: <Profile /> },
+          { path: "/users", element: <Users /> },
         ],
       },
     ],

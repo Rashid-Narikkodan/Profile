@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUser, updateUser, uploadUserAvatar } from "./user.thunk";
+import {fetchUser, updateUser, uploadUserAvatar } from "./user.thunk";
 import type { PublicUser } from "../../../types/user";
 
 interface UserState {
@@ -7,7 +7,7 @@ interface UserState {
   fetchStatus: "idle" | "loading" | "succeeded" | "failed";
   updateStatus: "idle" | "loading" | "succeeded" | "failed";
   avatarStatus: "idle" | "loading" | "succeeded" | "failed";
-
+  
   fetchError: string | null;
   updateError: string | null;
   avatarError: string | null;
@@ -73,7 +73,7 @@ const userSlice = createSlice({
       .addCase(uploadUserAvatar.rejected, (state, action) => {
         state.avatarStatus = "failed";
         state.avatarError = action.payload ?? "Avatar upload failed";
-      });
+      })
   },
 });
 

@@ -16,7 +16,7 @@ export interface IUser extends Document {
   updatedAt: Date;
 }
 export interface PublicUser {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   avatar?:Avatar;
