@@ -6,7 +6,7 @@ import { ArrowLeftCircle } from "lucide-react";
 import ProfileDetails from "../components/ProfileDetails";
 import ProfileCard from "../components/ProfileCard";
 import { useNavigate } from "react-router-dom";
-import Notify from "../../../components/ui/Notify";
+import { showToast } from "../../toastSlice";
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch();
@@ -20,7 +20,9 @@ export default function ProfilePage() {
   if(!user) return
 
   if (fetchStatus === 'loading') return <Loader fullScreen={true} />;
-  if (fetchError) return <Notify message={fetchError} type="error" onClose={()=>{}} />;
+  if (fetchError){
+    dispatch(showToast(fetchError,'error'))
+  } 
 
   return (
     <div className="min-h-screen w-screen rounded bg-gray-950 text-gray-100 relative overflow-hidden">
@@ -46,7 +48,7 @@ export default function ProfilePage() {
 }
 
 /* --------------------- Background Glows --------------------- */
-const BackgroundGlows = () => (
+export const BackgroundGlows = () => (
   <div className="absolute inset-0 pointer-events-none">
     <div className="absolute -top-40 -left-40 w-125 h-125 bg-purple-700/20 rounded-full blur-3xl animate-pulse-slow" />
     <div className="absolute -bottom-40 -right-40 w-160 h-125 bg-indigo-700/15 rounded-full blur-3xl animate-pulse-slow delay-1000" />

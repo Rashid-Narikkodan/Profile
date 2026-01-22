@@ -3,9 +3,10 @@ import LogoutButton from "../../../components/ui/LogoutButton";
 import StatusBadge from "./StatusBadge";
 import { deleteAvatar, uploadUserAvatar } from "../userState/user.thunk";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import Notify from "../../../components/ui/Notify";
 import Loader from '../../../components/ui/Loader'
 import { Trash } from "lucide-react";
+import Tooltip from "../../../components/ui/ToolTip";
+import { showToast } from "../../toastSlice";
 
 /* --------------------- Constants --------------------- */
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
@@ -81,7 +82,7 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
     if (uploadUserAvatar.fulfilled.match(result)) {
       resetSelection();
     } else {
-      setError("Avatar upload failed");
+      dispatch(showToast("Avatar upload failed",'error'));
     }
   };
 
@@ -109,6 +110,10 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
     };
   }, [preview]);
 
+  if(avatarError){
+    dispatch(showToast(avatarError),'error')
+  }
+
   /* --------------------- Render --------------------- */
   return (
     <div
@@ -116,7 +121,6 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
                  rounded-3xl border border-white/10 shadow-2xl
                  p-10 text-center max-w-md mx-auto"
     >
-      {avatarError&&<Notify message={avatarError} type="error" onClose={()=>{}} />}
       {error && (
         <div className="bg-red-400/70 border border-red-800 rounded p-4 mb-2">
           {error}
@@ -142,6 +146,7 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
   />
 
   {/* Glow background */}
+  <Tooltip content="Click to add new avatar">
   <div className="absolute inset-0 rounded-full bg-linear-to-br
                   from-purple-500 to-indigo-600 blur-2xl
                   opacity-50 animate-pulse" />
@@ -160,7 +165,8 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
   className={`relative z-10 w-40 h-40 rounded-full object-cover
               border-4 border-indigo-500/40 shadow-xl
               ${isUploading ? "opacity-60" : ""}`}
-  />
+              />
+              </Tooltip>
 
   {/* Uploading overlay */}
 {isUploading && (
@@ -175,7 +181,9 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
 {
 user.avatar?.url &&
 <button onClick={handleDeleteAvatar} className=" absolute bottom-1 right-1 bg-red-400 roudned p-2 rounded-full z-20">
+<Tooltip content="Delete Avatar">
 <Trash/>
+</Tooltip>
 </button>
 }
 

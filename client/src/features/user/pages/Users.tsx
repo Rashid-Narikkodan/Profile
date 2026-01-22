@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import Pagination from "../../../components/ui/Pagination";
 import UserCard from "../components/UserCard";
+import { showToast } from "../../toastSlice";
 import RegisterModal from "../../auth/components/Register";
 import {
   fetchUsers,
   deleteUser,
   toggleStatus,
 } from "../userState/user.thunk";
+import { BackgroundGlows } from "./Profile";
 
 /* ======================= UI COMPONENTS ======================= */
 
@@ -59,7 +61,7 @@ const Users: React.FC = () => {
         limit,
       })
     );
-  }, [debouncedSearch, page, limit]);
+  }, [debouncedSearch,dispatch, page, limit]);
 
   /* ---------- Actions ---------- */
   const handleDelete = (id: string) => {
@@ -70,6 +72,7 @@ const Users: React.FC = () => {
 
   const handleToggleStatus = (id: string) => {
     dispatch(toggleStatus(id));
+    dispatch(showToast("User status Updtaed",'success'));
   };
 
 
@@ -79,7 +82,8 @@ const Users: React.FC = () => {
 
   /* ---------- Render ---------- */
   return (
-    <div className="min-h-screen w-full bg-linear-to-br from-gray-900 via-purple-950 to-black text-white p-8">
+    <div className="min-h-screen w-screen overflow-x-hidden text-white p-8">
+      <BackgroundGlows />
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex justify-between items-center">

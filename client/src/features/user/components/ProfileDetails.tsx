@@ -5,11 +5,13 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import type { EditUserInput } from "../../../types/user";
 import { updateUser } from "../userState/user.thunk";
 import { validateEditInputs } from "../user.validation";
+import { showToast } from "../../toastSlice";
 
 /* --------------------- Profile Details --------------------- */
 
 const ProfileDetails = () => {
   const user=useAppSelector(state=>state.user?.data)
+  const {updateError}=useAppSelector(state=>state.user)
   const [isEdit, setEdit] = useState(false);
   const [isSubmitted, setSubmitted] = useState(false);
   const dispatch = useAppDispatch()
@@ -45,7 +47,8 @@ const ProfileDetails = () => {
     }
     setErrors({});
     const result = await dispatch(updateUser(form));
-    if (updateUser.fulfilled.match(result)) setEdit(false)  
+    if (updateUser.fulfilled.match(result)) setEdit(false)
+    else dispatch(showToast(updateError||'User updation failed','error'))  
   }
 
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
