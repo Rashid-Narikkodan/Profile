@@ -2,31 +2,29 @@ import { useEffect, useRef, useState } from "react";
 import LogoutButton from "../../../components/ui/LogoutButton";
 import StatusBadge from "./StatusBadge";
 import { deleteAvatar, uploadUserAvatar } from "../userState/user.thunk";
+import { deleteAvatarByAdmin, toggleStatus, updateAvatarByAdmin } from "../userState/admin.thunk";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import Loader from '../../../components/ui/Loader'
 import { Trash } from "lucide-react";
 import Tooltip from "../../../components/ui/ToolTip";
 import { showToast } from "../../toastSlice";
+import type { PublicUser } from "../../../types/user";
 
 /* --------------------- Constants --------------------- */
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 /* --------------------- Types --------------------- */
 type ProfileCardProps = {
-  user: {
-    avatar?: { url?: string };
-    name?: string;
-    role?: string;
-    status?: string;
-    createdAt?: string | Date;
-  };
+  user: PublicUser
 };
 
 /* --------------------- Component --------------------- */
 const ProfileCard = ({ user }: ProfileCardProps) => {
   const dispatch = useAppDispatch();
+  const isAdmin = useAppSelector(state=>state.user.data?._id !== user._id)
+  const isUploadingByAdmin = useAppSelector(state=>state.admin.updateStatus === 'loading')
   const {avatarError,avatarStatus}=useAppSelector(state=>state.user)
-  const isUploading = avatarStatus === 'loading'
+  const isUploading = avatarStatus === 'loading' || isUploadingByAdmin
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
@@ -77,12 +75,21 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
   const handleAvatarSave = async () => {
     if (!file) return;
 
-    const result = await dispatch(uploadUserAvatar(file));
+    if(isAdmin){
+      const result = await dispatch(updateAvatarByAdmin({file,userId:user._id}));
+      if (updateAvatarByAdmin.fulfilled.match(result)) {
+        resetSelection();
+      } else {
+        dispatch(showToast("Avatar upload failed",'error'));
+      }
+    }else{
+      const result = await dispatch(uploadUserAvatar(file));
+      if (uploadUserAvatar.fulfilled.match(result)) {
+        resetSelection();
+      } else {
+        dispatch(showToast("Avatar upload failed",'error'));
+      }
 
-    if (uploadUserAvatar.fulfilled.match(result)) {
-      resetSelection();
-    } else {
-      dispatch(showToast("Avatar upload failed",'error'));
     }
   };
 
@@ -99,7 +106,11 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
   const confirmDelete = window.confirm("Are you sure you want to delete your avatar?");
   if (!confirmDelete) return;
 
-  dispatch(deleteAvatar());
+  if(isAdmin){
+    dispatch(deleteAvatarByAdmin(user._id))
+  }else{
+    dispatch(deleteAvatar());
+  }
 };
 
 
@@ -180,7 +191,7 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
 )}
 {
 user.avatar?.url &&
-<button onClick={handleDeleteAvatar} className=" absolute bottom-1 right-1 bg-red-400 roudned p-2 rounded-full z-20">
+<button disabled={isUploading} onClick={handleDeleteAvatar} className=" absolute bottom-1 right-1 bg-red-400 roudned p-2 rounded-full z-20">
 <Tooltip content="Delete Avatar">
 <Trash/>
 </Tooltip>
@@ -218,7 +229,14 @@ user.avatar?.url &&
       </p>
 
       {/* Status */}
-      <StatusBadge status={user?.status} />
+      {
+        isAdmin ?
+        <Tooltip content={`Click to ${user.status == 'active'?"inactive":'active'}`}>
+        <StatusBadge status={user?.status} onClick={()=>dispatch(toggleStatus(user._id))} />
+        </Tooltip>
+        :
+        <StatusBadge status={user?.status} />
+      }
 
       {/* Meta */}
       <div className="mt-10 pt-6 border-t border-white/10 text-sm text-gray-400">
@@ -235,7 +253,10 @@ user.avatar?.url &&
           </span>
         </div>
         <div className="mt-2">
-          <LogoutButton />
+          {
+            !isAdmin&&
+            <LogoutButton />
+          }
         </div>
       </div>
     </div>

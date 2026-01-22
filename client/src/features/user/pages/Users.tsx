@@ -8,27 +8,8 @@ import {
   fetchUsers,
   deleteUser,
   toggleStatus,
-} from "../userState/user.thunk";
-import { BackgroundGlows } from "./Profile";
-
-/* ======================= UI COMPONENTS ======================= */
-
-// const StatusBadge: React.FC<{ status: "active" | "inactive" }> = ({ status }) => (
-//   <span
-//     className={`px-3 py-1 rounded-full text-xs font-medium ${
-//       status === "active"
-//         ? "bg-green-600/30 text-green-400"
-//         : "bg-red-600/30 text-red-400"
-//     }`}
-//   >
-//     {status}
-//   </span>
-// );
-
-
-
-
-/* ======================= CONTAINER ======================= */
+} from "../userState/admin.thunk";
+import { BackgroundGlows } from "../components/BackgroundGlow";
 
 const Users: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -42,7 +23,7 @@ const Users: React.FC = () => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-
+  
   /* ---------- Debounce Search ---------- */
   useEffect(() => {
     const timer = setTimeout(() => {

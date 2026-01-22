@@ -1,8 +1,9 @@
 /* --------------------- Status Badge --------------------- */
-const StatusBadge = ({ status }: { status?: string }) => {
+const StatusBadge = ({ status, onClick }: { status?: string, onClick?:()=>void }) => {
   const isActive = status === "active";
   return (
     <div
+    onClick={onClick}
       className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium ${
         isActive
           ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"

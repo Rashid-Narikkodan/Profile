@@ -8,7 +8,7 @@ import {
   validateRegister,
   type RegisterErrors,
 } from "../auth.validation";
-import { createNewUser } from "../../user/userState/user.thunk";
+import { createNewUser } from "../../user/userState/admin.thunk";
 
 const RegisterModal: React.FC<{
   onClose: () => void;

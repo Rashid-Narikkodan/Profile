@@ -12,7 +12,7 @@ function Tooltip({ content, children }:{content:string, children:React.ReactNode
       {children}
 
       {visible && (
-        <div className="absolute bottom-full mb-2 px-3 py-1 text-sm bg-indigo-500 text-white rounded">
+        <div className={`absolute bottom-full mb-2 px-3 py-1 text-sm bg-indigo-500 text-white rounded`}>
           {content}
         </div>
       )}

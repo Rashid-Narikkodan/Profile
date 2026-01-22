@@ -118,7 +118,11 @@ export const updateUserService = async (
     throw new Error("User not found");
   }
 
-  return user;
+  return {
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+  };
 };
 
 

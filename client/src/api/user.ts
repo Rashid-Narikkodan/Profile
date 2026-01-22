@@ -11,5 +11,6 @@ import api from "./axios";
  export const getUsers = (params:{search?:string,page?:number,limit?:number}) => api.get("/admin/users",{params})
  export const getUserById = (userId:string) => api.get(`/admin/users/${userId}`)
 export const deleteUserByIdApi = (userId:string)=> api.delete(`/admin/users/${userId}/delete`)
-export const updateUser = (userId:string)=> api.patch(`/admin/users/${userId}`)
+export const updateUser = (userId:string,data:EditUserInput)=> api.patch(`/admin/users/${userId}`,data)
 export const toggleUserStatus = (userId:string)=> api.patch(`/admin/users/${userId}/status`)
+export const deleteAvatarByAdminApi = (userId:string)=> api.delete(`/admin/users/${userId}/avatar`)

@@ -1,32 +1,54 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { fetchUser } from "../userState/user.thunk";
+import { fetchUserByAdmin } from "../userState/admin.thunk";
 import Loader from "../../../components/ui/Loader";
 import { ArrowLeftCircle } from "lucide-react";
 import ProfileDetails from "../components/ProfileDetails";
 import ProfileCard from "../components/ProfileCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { showToast } from "../../toastSlice";
+import { BackgroundGlows } from "../components/BackgroundGlow";
 
 export default function ProfilePage() {
-  const dispatch = useAppDispatch();
-  const { data: user, fetchError, fetchStatus } = useAppSelector((state) => state.user);
-  const navigate = useNavigate()
+const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (!user) dispatch(fetchUser());
-  }, [dispatch, user]);
+const { id } = useParams();
+const isAdmin = Boolean(id);
 
-  if(!user) return
+const { data:user, fetchError, fetchStatus } = useAppSelector((state) =>
+  isAdmin ? state.admin : state.user
+);
 
-  if (fetchStatus === 'loading') return <Loader fullScreen={true} />;
-  if (fetchError){
-    dispatch(showToast(fetchError,'error'))
-  } 
+const navigate = useNavigate();
+
+useEffect(() => {
+  if (isAdmin && id) {
+    dispatch(fetchUserByAdmin(id)); // admin: fetch user by id
+  } else {
+    dispatch(fetchUser());    // normal: fetch own profile
+  }
+}, [dispatch, id, isAdmin]);
+
+if (fetchStatus === "loading") {
+  return <Loader fullScreen={true} />;
+}
+
+if (fetchError) {
+  dispatch(showToast(fetchError, "error"));
+  return null;
+}
+
+if (!user) {
+  return null;
+}
+
 
   return (
     <div className="min-h-screen w-screen rounded bg-gray-950 text-gray-100 relative overflow-hidden">
-      < ArrowLeftCircle onClick={()=>navigate(-1)} size={34} className="absolute top-5 left-5" />
+      <div className="absolute top-5 left-5 p-2">
+      < ArrowLeftCircle onClick={()=>navigate(-1)} size={34}  />
+      </div>
       {/* Background Glows */}
       <BackgroundGlows />
 
@@ -39,7 +61,7 @@ export default function ProfilePage() {
 
           {/* Right: Profile Details */}
           <div className="lg:col-span-8">
-            <ProfileDetails/>
+            <ProfileDetails user={user}/>
           </div>
         </div>
       </div>
@@ -47,14 +69,7 @@ export default function ProfilePage() {
   );
 }
 
-/* --------------------- Background Glows --------------------- */
-export const BackgroundGlows = () => (
-  <div className="absolute inset-0 pointer-events-none">
-    <div className="absolute -top-40 -left-40 w-125 h-125 bg-purple-700/20 rounded-full blur-3xl animate-pulse-slow" />
-    <div className="absolute -bottom-40 -right-40 w-160 h-125 bg-indigo-700/15 rounded-full blur-3xl animate-pulse-slow delay-1000" />
-    <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-fuchsia-600/10 rounded-full blur-3xl animate-pulse-slow delay-2000" />
-  </div>
-);
+
 
 
 

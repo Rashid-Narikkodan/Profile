@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import InfoField from "./InfoField";
 import InputField from "./InputField";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import type { EditUserInput } from "../../../types/user";
+import type { EditUserInput, PublicUser } from "../../../types/user";
 import { updateUser } from "../userState/user.thunk";
 import { validateEditInputs } from "../user.validation";
 import { showToast } from "../../toastSlice";
+import {updateUserByAdmin} from '../userState/admin.thunk' 
 
 /* --------------------- Profile Details --------------------- */
 
-const ProfileDetails = () => {
-  const user=useAppSelector(state=>state.user?.data)
+const ProfileDetails = ({user}:{user:PublicUser}) => {
+
+  const isAdmin = useAppSelector(state=>state.user.data?._id !== user._id)
+
   const {updateError}=useAppSelector(state=>state.user)
   const [isEdit, setEdit] = useState(false);
   const [isSubmitted, setSubmitted] = useState(false);
@@ -46,9 +49,15 @@ const ProfileDetails = () => {
       return;
     }
     setErrors({});
-    const result = await dispatch(updateUser(form));
-    if (updateUser.fulfilled.match(result)) setEdit(false)
-    else dispatch(showToast(updateError||'User updation failed','error'))  
+    if(isAdmin){
+      const result = await dispatch(updateUserByAdmin({data:form,userId:user._id}));
+      if (updateUserByAdmin.fulfilled.match(result)) setEdit(false)
+        else dispatch(showToast(updateError||'User updation failed','error'))  
+    }else{
+      const result = await dispatch(updateUser(form));
+      if (updateUser.fulfilled.match(result)) setEdit(false)
+        else dispatch(showToast(updateError||'User updation failed','error'))  
+    }
   }
 
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
