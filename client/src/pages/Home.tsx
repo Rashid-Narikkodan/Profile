@@ -69,24 +69,6 @@ const Home: React.FC = () => {
               </div>
             )}
 
-            {/* Admin: Settings */}
-            {user.role === "admin" && (
-              <div className="bg-gray-900/70 backdrop-blur border border-purple-800/40 rounded-xl p-6 hover:border-purple-500 transition">
-                <h3 className="text-xl font-semibold text-white mb-2">
-                  System Settings
-                </h3>
-                <p className="text-gray-400 mb-4">
-                  Configure roles, permissions, and platform behavior.
-                </p>
-                <button
-                  onClick={() => navigate("/settings")}
-                  className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-white transition"
-                >
-                  Open Settings
-                </button>
-              </div>
-            )}
-
           </div>
 
         </div>

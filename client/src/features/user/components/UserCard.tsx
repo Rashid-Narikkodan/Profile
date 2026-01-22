@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { PublicUser } from "../../../types/user";
 import ActionButton from "./ActionButton";
 import StatusBadge from "./StatusBadge";
+import Tooltip from "../../../components/ui/ToolTip";
 
 const UserCard: React.FC<{
   user: PublicUser;
@@ -15,8 +16,10 @@ const UserCard: React.FC<{
     <div className="bg-linear-to-b from-purple-950/80 to-gray-900/70 rounded-xl p-6 space-y-4 shadow-lg">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold text-purple-300">{user.name}</h2>
+        <Tooltip content={`click to ${user.status === 'active'?'inactive':'active'} user`}>
         <StatusBadge           
         onClick={() => onToggleStatus(userId)} status={user.status} />
+        </Tooltip>
       </div>
 
       <div className="text-sm text-gray-400">{user.email}</div>

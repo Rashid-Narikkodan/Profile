@@ -139,8 +139,7 @@ const adminSlice = createSlice({
       })
       .addCase(updateAvatarByAdmin.fulfilled, (state, action) => {
         state.updateStatus = "succeeded";
-        console.log(action.payload)
-        if(state.data && state.data.avatar){
+        if(state.data){
           state.data.avatar = action.payload
         }
       })
@@ -155,7 +154,6 @@ const adminSlice = createSlice({
       })
       .addCase(deleteAvatarByAdmin.fulfilled, (state, action) => {
         state.updateStatus = "succeeded";
-        console.log(action.payload)
         if(state.data){
           state.data.avatar = action.payload
         }
