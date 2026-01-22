@@ -181,7 +181,5 @@ export const createUserService = async (input: RegisterInput) => {
     status: "active",
   });
   await user.save();
-  console.log(user)
-  //reurn user data
   return user;
 };

@@ -128,7 +128,6 @@ const adminSlice = createSlice({
       })
       .addCase(fetchUserByAdmin.fulfilled, (state, action) => {
         state.fetchStatus = "succeeded";
-        console.log(action.payload);
         state.data = action.payload.user;
       })
       .addCase(fetchUserByAdmin.rejected, (state, action) => {
@@ -172,7 +171,6 @@ const adminSlice = createSlice({
       })
       .addCase(updateUserByAdmin.fulfilled, (state, action) => {
         state.updateStatus = "succeeded";
-        console.log(action.payload);
         if (state.data) {
           if (state.data) {
             Object.assign(state.data, action.payload);

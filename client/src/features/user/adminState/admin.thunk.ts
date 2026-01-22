@@ -132,7 +132,6 @@ Avatar,
     "admin/updateAvatarByAdmin",
     async ({ file, userId }, { rejectWithValue,dispatch }) => {
       try {
-        console.log(file)
         const res = await updateUserAvatarByAdminApi(userId,file)
         dispatch(showToast("User Avatar updated successfully",'success'))
         return res.data.avatar;
