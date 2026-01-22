@@ -16,7 +16,7 @@ const SigninModal: React.FC<Props> = ({ onClose, onOpenRegister }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { status, error: serverError } = useAppSelector(
+  const { status, loginError: error } = useAppSelector(
     (state) => state.auth
   );
 
@@ -88,9 +88,9 @@ const SigninModal: React.FC<Props> = ({ onClose, onOpenRegister }) => {
             Sign in to continue securely.
           </p>
 
-          {serverError && (
+          {error && (
             <div className="mb-4 rounded bg-red-900/40 border border-red-700 text-red-200 px-4 py-2 text-sm">
-              {serverError}
+              {error}
             </div>
           )}
 

@@ -31,7 +31,7 @@ const RegisterModal: React.FC<{
   });
   const navigate = useNavigate();
   const isLoading = useAppSelector((state) => state.auth.status === "loading");
-  const error = useAppSelector((state) => state.auth.error);
+  const error = useAppSelector((state) => state.auth.registerError);
   const dispatch = useAppDispatch();
 
 
