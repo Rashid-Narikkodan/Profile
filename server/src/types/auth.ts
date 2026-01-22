@@ -1,3 +1,4 @@
+import type { Request } from "express"
 export interface RegisterInput{
     name:string,
     email:string,
@@ -7,4 +8,12 @@ export interface RegisterInput{
 export interface LoginInput{
     email:string,
     password:string
+}
+
+export interface AuthUser{
+  id:string,
+  email:string,
+  name:string;
+  role:'admin'|'user'
+  status:'active'|'inactive'
 }
