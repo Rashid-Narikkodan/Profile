@@ -6,7 +6,7 @@ import Loader from "../../../components/ui/Loader";
 import { ArrowLeftCircle } from "lucide-react";
 import ProfileDetails from "../components/ProfileDetails";
 import ProfileCard from "../components/ProfileCard";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { showToast } from "../../toastSlice";
 import { BackgroundGlows } from "../components/BackgroundGlow";
 
@@ -20,7 +20,6 @@ const { data:user, fetchError, fetchStatus } = useAppSelector((state) =>
   isAdmin ? state.admin : state.user
 );
 
-const navigate = useNavigate();
 
 useEffect(() => {
   if (isAdmin && id) {
@@ -46,9 +45,11 @@ if (!user) {
 
   return (
     <div className="min-h-screen w-screen rounded bg-gray-950 text-gray-100 relative overflow-hidden">
+      <Link to={`${isAdmin?"/users":"/home"}`} >
       <div className="absolute top-5 left-5 p-2">
-      < ArrowLeftCircle onClick={()=>navigate(-1)} size={34}  />
+      < ArrowLeftCircle  size={34}  />
       </div>
+      </Link>
       {/* Background Glows */}
       <BackgroundGlows />
 
