@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { AuthUser } from "../../../types/auth";
+import type { AuthUser } from "@/types/auth";
 import { bootstrapAuth, loginUser, logoutUser, registerUser } from "./auth.thunk";
 
 // ------------------------- State Interface -------------------------

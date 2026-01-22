@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import InfoField from "./InfoField";
 import InputField from "./InputField";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import type { EditUserInput, PublicUser } from "../../../types/user";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import type { EditUserInput, PublicUser } from "@/types/user";
 import { updateUser } from "../userState/user.thunk";
 import { validateEditInputs } from "../user.validation";
-import { showToast } from "../../toastSlice";
-import {updateUserByAdmin} from '../userState/admin.thunk' 
+import { showToast } from "@/app/slices/toastSlice";
+import { updateUserByAdmin } from "../adminState/admin.thunk";
 
 /* --------------------- Profile Details --------------------- */
 

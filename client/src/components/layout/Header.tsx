@@ -1,6 +1,5 @@
-import {} from "../../features/auth/authState/auth.thunk";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAppSelector } from "../../hooks/redux";
+import { useAppSelector } from "@/hooks/redux";
 import Tooltip from "../ui/ToolTip";
 
 const Header: React.FC = () => {

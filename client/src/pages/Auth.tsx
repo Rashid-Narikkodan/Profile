@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Signin from "../components/Signin";
-import Register from "../components/Register";
+import Signin from "@/features/auth/components/Signin";
+import Register from "@/features/auth/components/Register";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../../hooks/redux";
+import { useAppSelector } from "@/hooks/redux";
 
 const Auth: React.FC = () => {
   const [mode, setMode] = useState<"login" | "register">("login");

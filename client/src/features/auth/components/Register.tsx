@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { registerUser } from "../authState/auth.thunk";
 import { useNavigate } from "react-router-dom";
-
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+import { registerUser } from "../authState/auth.thunk";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   validateRegister,
   type RegisterErrors,
 } from "../auth.validation";
-import { createNewUser } from "../../user/userState/admin.thunk";
+import { createUserByAdmin } from "@/features/user/adminState/admin.thunk";
 
 const RegisterModal: React.FC<{
   onClose: () => void;
@@ -57,8 +56,8 @@ const RegisterModal: React.FC<{
       }
     setErrors({});
     if(role === 'admin'){
-      const result = await dispatch(createNewUser(form)); 
-      if (createNewUser.fulfilled.match(result)) {
+      const result = await dispatch(createUserByAdmin(form)); 
+      if (createUserByAdmin.fulfilled.match(result)) {
         navigate("/users");
         onClose();
         return

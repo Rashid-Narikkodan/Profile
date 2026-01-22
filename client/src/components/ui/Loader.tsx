@@ -1,6 +1,6 @@
 type LoaderProps = {
-  fullScreen?: boolean; // if true → full page overlay, else fits parent
-  className?: string;   // optional extra classes
+  fullScreen?: boolean;
+  className?: string;
 };
 
 const Loader = ({ fullScreen = false, className = "" }: LoaderProps) => {

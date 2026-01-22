@@ -1,4 +1,4 @@
-import type { EditUserInput } from "../../types/user"
+import type { EditUserInput } from "@/types/user"
 
 export type EditUserError = Partial<Record<keyof EditUserInput, string>>
 

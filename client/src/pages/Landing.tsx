@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import type { RootState } from "../app/store";
+import type { RootState } from "@/app/store";
 
 const Landing = () => {
   const user = useSelector((state: RootState) => state.auth.user);

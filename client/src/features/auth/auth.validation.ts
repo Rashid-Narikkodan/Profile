@@ -1,4 +1,4 @@
-import type { LoginInput, RegisterInput } from "../../types/auth"
+import type { LoginInput, RegisterInput } from "@/types/auth"
 
 export type RegisterErrors = Partial<Record<keyof RegisterInput, string>>
 export type LoginError = Partial<Record<keyof LoginInput, string>>

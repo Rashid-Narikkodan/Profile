@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import Pagination from "../../../components/ui/Pagination";
-import UserCard from "../components/UserCard";
-import { showToast } from "../../toastSlice";
-import RegisterModal from "../../auth/components/Register";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import Pagination from "@/components/ui/Pagination";
+import UserCard from "@/features/user/components/UserCard";
+import { showToast } from "@/app/slices/toastSlice";
+import RegisterModal from "@/features/auth/components/Register";
 import {
-  fetchUsers,
-  deleteUser,
-  toggleStatus,
-} from "../userState/admin.thunk";
-import { BackgroundGlows } from "../components/BackgroundGlow";
+  fetchUsersByAdmin,
+  deleteUserByAdmin,
+  toggleUserStatusByAdmin,
+} from "../features/user/adminState/admin.thunk";
+import { BackgroundGlows } from "../features/user/components/BackgroundGlow";
 
 const Users: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ const Users: React.FC = () => {
   /* ---------- Fetch Users ---------- */
   useEffect(() => {
     dispatch(
-      fetchUsers({
+      fetchUsersByAdmin({
         search: debouncedSearch,
         page,
         limit,
@@ -47,12 +47,12 @@ const Users: React.FC = () => {
   /* ---------- Actions ---------- */
   const handleDelete = (id: string) => {
     if (confirm("Delete this user?")) {
-      dispatch(deleteUser(id));
+      dispatch(deleteUserByAdmin(id));
     }
   };
 
   const handleToggleStatus = (id: string) => {
-    dispatch(toggleStatus(id));
+    dispatch(toggleUserStatusByAdmin(id));
     dispatch(showToast("User status Updtaed",'success'));
   };
 

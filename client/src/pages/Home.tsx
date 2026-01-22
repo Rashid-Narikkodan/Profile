@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import type { RootState } from "../app/store";
+import type { RootState } from "@/app/store";
 
 const Home: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);

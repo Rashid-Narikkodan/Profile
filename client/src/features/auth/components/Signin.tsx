@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { loginUser } from "../authState/auth.thunk";
 import { validateLogin, type LoginError } from "../auth.validation";
 

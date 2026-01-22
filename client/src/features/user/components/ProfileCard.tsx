@@ -1,14 +1,14 @@
+import type { PublicUser } from "@/types/user";
+import { Trash } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import LogoutButton from "../../../components/ui/LogoutButton";
+import LogoutButton from "@/components/ui/LogoutButton";
 import StatusBadge from "./StatusBadge";
 import { deleteAvatar, uploadUserAvatar } from "../userState/user.thunk";
-import { deleteAvatarByAdmin, toggleStatus, updateAvatarByAdmin } from "../userState/admin.thunk";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import Loader from '../../../components/ui/Loader'
-import { Trash } from "lucide-react";
-import Tooltip from "../../../components/ui/ToolTip";
-import { showToast } from "../../toastSlice";
-import type { PublicUser } from "../../../types/user";
+import { deleteAvatarByAdmin, toggleUserStatusByAdmin, updateAvatarByAdmin } from "../adminState/admin.thunk";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import Loader from '@/components/ui/Loader'
+import Tooltip from "@/components/ui/ToolTip";
+import { showToast } from "@/app/slices/toastSlice";
 
 /* --------------------- Constants --------------------- */
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
@@ -232,7 +232,7 @@ user.avatar?.url &&
       {
         isAdmin ?
         <Tooltip content={`Click to ${user.status == 'active'?"inactive":'active'}`}>
-        <StatusBadge status={user?.status} onClick={()=>dispatch(toggleStatus(user._id))} />
+        <StatusBadge status={user?.status} onClick={()=>dispatch(toggleUserStatusByAdmin(user._id))} />
         </Tooltip>
         :
         <StatusBadge status={user?.status} />

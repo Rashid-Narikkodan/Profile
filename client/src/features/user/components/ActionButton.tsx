@@ -11,4 +11,4 @@ const ActionButton: React.FC<{
   </button>
 );
 
-export default ActionButton
+export default ActionButton;

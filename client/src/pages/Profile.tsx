@@ -1,16 +1,17 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { fetchUser } from "../userState/user.thunk";
-import { fetchUserByAdmin } from "../userState/admin.thunk";
-import Loader from "../../../components/ui/Loader";
 import { ArrowLeftCircle } from "lucide-react";
-import ProfileDetails from "../components/ProfileDetails";
-import ProfileCard from "../components/ProfileCard";
 import { Link, useParams } from "react-router-dom";
-import { showToast } from "../../toastSlice";
-import { BackgroundGlows } from "../components/BackgroundGlow";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { fetchUser } from "@/features/user/userState/user.thunk";
+import Loader from "@/components/ui/Loader";
+import { fetchUserByAdmin } from "@/features/user/adminState/admin.thunk";
+import ProfileCard from "@/features/user/components/ProfileCard";
+import ProfileDetails from "@/features/user/components/ProfileDetails";
+import { showToast } from "@/app/slices/toastSlice";
+import { BackgroundGlows } from "@/features/user/components/BackgroundGlow";
 
-export default function ProfilePage() {
+
+export default function Profile() {
 const dispatch = useAppDispatch();
 
 const { id } = useParams();

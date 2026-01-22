@@ -1,9 +1,17 @@
-/* --------------------- Status Badge --------------------- */
-const StatusBadge = ({ status, onClick }: { status?: string, onClick?:()=>void }) => {
+
+type StatusBadgeProps={
+  status?: string;
+  onClick?: () => void;
+}
+
+const StatusBadge = ({
+  status,
+  onClick,
+}:StatusBadgeProps) => {
   const isActive = status === "active";
   return (
     <div
-    onClick={onClick}
+      onClick={onClick}
       className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium ${
         isActive
           ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
@@ -18,4 +26,4 @@ const StatusBadge = ({ status, onClick }: { status?: string, onClick?:()=>void }
   );
 };
 
-export default StatusBadge
+export default StatusBadge;

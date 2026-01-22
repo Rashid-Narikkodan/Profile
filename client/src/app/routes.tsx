@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom"
-import MainLayout from "../components/layout/MainLayout"
-import Landing from "../pages/Landing"
-import Home from "../pages/Home"
-import Auth from "../features/auth/pages/Auth"
-import ProtoctedRoute from "../components/ProtectedRoute"
-import PublicRoute from "../components/PublicRoute"
-import Profile from "../features/user/pages/Profile"
-import Users from "../features/user/pages/Users"
+import MainLayout from "@/components/layout/MainLayout"
+import Landing from "@/pages/Landing"
+import Home from "@/pages/Home"
+import Auth from "@/pages/Auth"
+import ProtoctedRoute from "@/routes/ProtectedRoute"
+import PublicRoute from "@/routes/PublicRoute"
+import Profile from "@/pages/Profile"
+import Users from "@/pages/Users"
 
 export const router = createBrowserRouter([
   {

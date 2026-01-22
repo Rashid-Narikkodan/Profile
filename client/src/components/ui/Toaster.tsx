@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import type { RootState } from "../../app/store";
-import { removeToast, type Toast } from "../../features/toastSlice";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import type { RootState } from "@/app/store";
+import { removeToast, type Toast } from "@/app/slices/toastSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
 const AUTO_CLOSE_MS = 3000;
 

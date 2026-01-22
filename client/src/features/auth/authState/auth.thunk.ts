@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { setAccessToken } from "../../../api/axios";
-import type { AuthUser, LoginInput, RegisterInput } from "../../../types/auth";
-import { normalizeApiError } from "../../../utils/ApiError";
+import { setAccessToken } from "@/api/axios";
+import type { AuthUser, LoginInput, RegisterInput } from "@/types/auth";
+import { normalizeApiError } from "@/utils/ApiError";
 
 import {
   loginApi,
@@ -9,7 +9,7 @@ import {
   registerApi,
   logoutApi,
   getMeApi,
-} from "../../../api/auth";
+} from "@/api/auth";
 
 type AuthUserData = { user: AuthUser; accessToken: string };
 

@@ -1,12 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom"
 import { useAppSelector } from "../hooks/redux"
-import Loader from "./ui/Loader"
+import Loader from "../components/ui/Loader"
 
 const ProtectedRoute = () => {
   const status = useAppSelector((state) => state.auth.status)
   const userStatus = useAppSelector((state) => state.auth.user?.status)
 
-  // 1. Wait until bootstrapAuth resolves
   if ( status === "loading") {
     return <Loader fullScreen={true} /> // show a spinner or blank screen
   }

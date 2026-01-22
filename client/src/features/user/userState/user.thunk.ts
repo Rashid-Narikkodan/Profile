@@ -1,19 +1,15 @@
+import type { Avatar, PublicUser } from "@/types/user";
+import type { EditUserInput } from "@/types/user";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import type { Avatar, PublicUser } from "../../../types/user";
-import { getUser, editUser, deleteAvatarApi } from "../../../api/user";
-import type { EditUserInput } from "../../../types/user";
-import api from "../../../api/axios";
+import { getMeApi, updateMeApi, deleteMyAvatarApi } from "@/api/user";
+import { normalizeApiError } from "@/utils/ApiError";
+import api from "@/api/axios";
 
 
 type FetchUserResponse = {
     success: true
   user: PublicUser;
 };
-type ErrorResponse={
-  success: false
-  message: string
-}
 
 export const fetchUser = createAsyncThunk<
   FetchUserResponse,
@@ -23,21 +19,10 @@ export const fetchUser = createAsyncThunk<
   "user/fetchUser",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await getUser()
+      const res = await getMeApi()
       return res.data;
     } catch (err: unknown) {
-    if (axios.isAxiosError<ErrorResponse>(err)) {
-        return rejectWithValue(
-          err.response?.data?.message ?? "Registration failed"
-        )
-      }
-
-      // Non-Axios / unexpected error
-      if (err instanceof Error) {
-        return rejectWithValue(err.message)
-      }
-
-      return rejectWithValue("Registration failed")
+      return rejectWithValue(normalizeApiError(err))
     }
     }
 );
@@ -49,21 +34,10 @@ export const updateUser= createAsyncThunk<
 >('user/updateUser',
    async (data,{rejectWithValue})=>{
     try {
-      const res = await editUser(data)
+      const res = await updateMeApi(data)
       return res.data.user;
   }catch(err:unknown){
-    if (axios.isAxiosError<ErrorResponse>(err)) {
-        return rejectWithValue(
-          err.response?.data?.message ?? "Registration failed"
-        )
-      }
-
-      // Non-Axios / unexpected error
-      if (err instanceof Error) {
-        return rejectWithValue(err.message)
-      }
-
-      return rejectWithValue("Registration failed")
+      return rejectWithValue(normalizeApiError(err))
     }
 })
 
@@ -87,17 +61,7 @@ export const uploadUserAvatar = createAsyncThunk<
 
       return res.data.avatar;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        return rejectWithValue(
-          err.response?.data?.message ?? "Avatar upload failed"
-        );
-      }
-
-      if (err instanceof Error) {
-        return rejectWithValue(err.message);
-      }
-
-      return rejectWithValue("Avatar upload failed");
+      return rejectWithValue(normalizeApiError(err))
     }
   }
 );
@@ -112,20 +76,10 @@ export const deleteAvatar = createAsyncThunk<
   async (_, { rejectWithValue }) => {
     try {
   
-      const res = await deleteAvatarApi()
+      const res = await deleteMyAvatarApi()
       return res.data;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        return rejectWithValue(
-          err.response?.data?.message ?? "Avatar upload failed"
-        );
-      }
-
-      if (err instanceof Error) {
-        return rejectWithValue(err.message);
-      }
-
-      return rejectWithValue("Avatar upload failed");
+      return rejectWithValue(normalizeApiError(err))
     }
   }
 );
