@@ -44,7 +44,7 @@ export const registerUser = async (input: RegisterInput) => {
   });
   await user.save();
 
-  //JWT access and refresh token optionally
+  //JWT access and refresh token
   const accessToken = signAccessToken(user.id, user.status, user.role);
   const { refreshToken, tokenId } = signRefreshToken(user.id,user.status,user.role);
 

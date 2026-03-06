@@ -8,7 +8,7 @@ const store = configureStore({
     auth: authReducer,
     user:userReducer,
     admin:adminReducer,
-    toast:toasterReducer
+    toast:toasterReducer,
   }
 });
 

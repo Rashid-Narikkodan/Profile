@@ -21,7 +21,7 @@ const Users: React.FC = () => {
   const [hasAddUser, setHasAddUser] = useState(false);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(9);
   
   /* ---------- Debounce Search ---------- */
   useEffect(() => {

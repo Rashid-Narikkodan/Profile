@@ -6,7 +6,6 @@ import { AppError } from "../utils/AppError";
 export const register = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
     const data: RegisterInput = req.body;
     const { user, token } = await registerUser(data);
@@ -32,7 +31,6 @@ export const register = async (
 export const login = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
     const data: LoginInput = req.body;
 
@@ -53,7 +51,7 @@ export const login = async (
     });
 };
 
-export const getMe = async (req: Request, res: Response, next:NextFunction) => {
+export const getMe = async (req: Request, res: Response) => {
   if (!req.user) throw new AppError("Unautherized",401)
     const { id } = req.user;
 

@@ -1,5 +1,5 @@
 import 'express-async-errors';
-import express, { Application, Request, Response, NextFunction } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import authRoutes from './routes/auth.routes'
@@ -10,10 +10,6 @@ import { errorHandler } from "./middlewares/global.error";
 
 export const app: Application = express();
 
-// Body parsers
-app.use(express.json({ limit: "10kb" }));
-app.use(express.urlencoded({ extended: true }));
-
 // CORS
 app.use(
   cors({
@@ -22,7 +18,11 @@ app.use(
   })
 );
 
+// Body parsers
+app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
+
 
 // Logging (dev vs prod)
 if (process.env.NODE_ENV !== "production") {
@@ -40,6 +40,7 @@ app.get("/health", (_req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
   });
 });
+
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
@@ -54,5 +55,3 @@ app.use((_req: Request, res: Response) => { //404
 
 //Global error hanmdle midleware
 app.use(errorHandler)
-
-

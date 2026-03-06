@@ -65,11 +65,8 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
 );
 
 // ---------------- Bootstrap Auth Thunk ----------------
-export const bootstrapAuth = createAsyncThunk<
-AuthUserData,
-void,
-{ rejectValue: string }
->("auth/bootstrapAuth", async (_, { rejectWithValue, dispatch }) => {
+export const bootstrapAuth = createAsyncThunk<AuthUserData,void,{ rejectValue: string }>(
+  "auth/bootstrapAuth", async (_, { rejectWithValue }) => {
   try {
     const refreshRes = await refreshApi();
     setAccessToken(refreshRes.data.accessToken);
@@ -78,7 +75,6 @@ void,
     return { user: meRes.data.user, accessToken: refreshRes.data.accessToken };
   } catch (err: unknown) {
     const error = normalizeApiError(err)
-    dispatch(showToast(error,'error'))
     return rejectWithValue(error);    
   }
 });

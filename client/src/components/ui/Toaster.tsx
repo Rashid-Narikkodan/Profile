@@ -14,7 +14,7 @@ const ToastItem = ({ toast, onClose }: Props) => {
     const timer = setTimeout(onClose, AUTO_CLOSE_MS);
     return () => clearTimeout(timer);
   }, [onClose]);
-
+  
   return (
     <div
       className={`px-6 py-3 rounded shadow 

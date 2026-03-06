@@ -64,7 +64,10 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     [name]: value,
   };
 
-  setForm(nextForm);
+  setForm((state)=>({
+    ...state,
+    [name]: value,
+  }));
 
   if (isSubmitted) {
     const validationErrors = validateEditInputs(nextForm);
@@ -100,14 +103,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         <InfoField label="Account Status" value={user?.status} capitalize />
         <InfoField
           label="Last Updated"
-          value={
-            user?.updatedAt
-              ? new Date(user.updatedAt).toLocaleString("en-GB", {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })
-              : "—"
-          }
+          value={"—"}
         />
       </div>
       <div className="mt-10 pt-6 border-t border-white/10 text-sm text-gray-400">
